@@ -35,9 +35,11 @@ void strings() {
 ```
 ### rust
 ```rust
+"measure elapsed time";
 let (res, elapsed) = soup::measure!(long_operation()); // elapsed macro
 println!("elapsed: {}", soup::paint(elapsed, Color::Blue));
-// functions to quickly get some input without handling any errors
+
+"quickly get some input without handling any errors";
 let input = stdin_or_die(); // also provides some guidance for users if they do it wrong
 let input_file = file_or_die("./input.in");
 ```
