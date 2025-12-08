@@ -7,6 +7,92 @@ use std::{
 /// really cool helpers
 ///
 
+/// measure the time it takes to exec an expression
+/// expr -> expr(), Time
+#[macro_export]
+macro_rules! measure {
+    ($e:expr) => {{
+        let now = std::time::Instant::now();
+        ($e, now.elapsed())
+    }};
+}
+
+///
+/// death helpers
+///
+
+pub fn err_pretty(message: impl Display) -> String {
+    color(message, "1;31") // bold red
+}
+
+pub fn num_blue(message: impl Display) -> String {
+    color(message, "1;34") // bold blue
+}
+
+pub fn color(message: impl Display, color_code: &str) -> String {
+    format!("\x1b[{}m{}\x1b[0m", color_code, message)
+}
+
+pub fn die_pretty(message: impl Display) -> ! {
+    panic!("\x1b[1;31m{}\x1b[0;0m", message);
+    // eprintln!("\x1b[1;31m{}\x1b[0;0m", message);
+    // std::process::exit(1)
+}
+pub trait PrettyUnwrap<T> {
+    fn or_die(self) -> T;
+    fn ponder(self, msg: impl Display) -> T;
+}
+impl<T, E: Display> PrettyUnwrap<T> for Result<T, E> {
+    fn or_die(self) -> T {
+        match self {
+            Ok(v) => v,
+            Err(e) => die_pretty(e),
+        }
+    }
+
+    fn ponder(self, msg: impl Display) -> T {
+        match self {
+            Ok(v) => v,
+            Err(e) => die_pretty(format!("{}: {}", msg, e)),
+        }
+    }
+}
+impl<T> PrettyUnwrap<T> for Option<T> {
+    fn or_die(self) -> T {
+        match self {
+            Some(v) => v,
+            None => die_pretty("unwrapped on None()"),
+        }
+    }
+
+    fn ponder(self, msg: impl Display) -> T {
+        match self {
+            Some(v) => v,
+            None => die_pretty(msg),
+        }
+    }
+}
+
+pub fn aoc_test<F, T>(file: &str, solver: F, n: usize)
+where
+    F: Fn(Vec<String>) -> T,
+    T: Display,
+{
+    let (input, expected_opt) = file_or_die(file);
+    let expected = expected_opt.or_die();
+    let actual = solver(input).to_string();
+
+    assert_eq!(
+        actual,
+        if n == 1 { expected.0 } else { expected.1 },
+        "solution did not match expected output"
+    );
+}
+
+///
+/// read helpers
+///
+
 /// quick way to get everything
 pub fn stdin_or_die() -> String {
     // if there's a will, there's a way
@@ -17,13 +103,10 @@ pub fn stdin_or_die() -> String {
         }
         unsafe {
             if isatty(std::io::stdin().as_raw_fd()) != 0 {
-                use std::env::args;
-
-                eprintln!(
+                die_pretty(format!(
                     "you're in a tty! you have to pipe your input into this program\n  $ cat ./input.in | {}",
-                    args().collect::<Vec<_>>().join(" ")
-                );
-                std::process::exit(1);
+                    std::env::args().collect::<Vec<_>>().join(" ")
+                ));
             }
         }
     }
@@ -34,14 +117,37 @@ pub fn stdin_or_die() -> String {
     })
 }
 
-/// measure the time it takes to exec an expression
-/// expr -> expr(), Time
-#[macro_export]
-macro_rules! measure {
-    ($e:expr) => {{
-        let now = std::time::Instant::now();
-        ($e, now.elapsed())
-    }};
+/// advent of code expects to get one line from a big file so thats what im on
+/// the first line for it to know what u expect should be `expected: 1 and 2`
+/// filename -> (input lines, (expected, expected))
+pub fn file_or_die(
+    filename: impl AsRef<std::path::Path>,
+) -> (Vec<String>, Option<(String, String)>) {
+    let lines: Vec<String> = std::fs::read_to_string(&filename)
+        .unwrap_or_else(|err| {
+            eprintln!("Failed to read file {}: {err}", filename.as_ref().display());
+            std::process::exit(1);
+        })
+        .lines()
+        .map(|line| line.to_string())
+        .collect();
+
+    if lines.is_empty() {
+        eprintln!("file {} is empty!", filename.as_ref().display());
+        std::process::exit(1);
+    }
+
+    let first_line = lines[0].trim();
+    if let Some(content) = first_line.strip_prefix("expected: ") {
+        let (one, two) = content
+            .split_once(" and ")
+            .map(|(a, b)| (a.trim().to_string(), b.trim().to_string()))
+            .unwrap_or_else(|| die_pretty(format!("invalid expected format: {content}")));
+
+        (lines[1..].to_vec(), Some((one, two)))
+    } else {
+        (lines, None)
+    }
 }
 
 /// 1d vector interpreted as a grid
