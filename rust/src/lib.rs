@@ -112,6 +112,31 @@ where
     );
 }
 
+pub fn run_and_print<F, T>(
+    label: &str,
+    input: &[String],
+    expected_opt: &Option<(String, String)>,
+    solver: F,
+) where
+    F: Fn(Vec<String>) -> T,
+    T: Display,
+{
+    let (result, time) = measure!(solver(input.to_vec()));
+    println!("| {label} -> {} (took {time:.2?})", num_blue(&result));
+
+    if let Some((expected1, expected2)) = expected_opt {
+        let expected = if label.to_lowercase().contains('1') {
+            expected1
+        } else {
+            expected2
+        };
+
+        if result.to_string() != *expected {
+            println!("| {} {}", err_pretty("   wanted"), num_blue(expected),);
+        }
+    }
+}
+
 ///
 /// read helpers
 ///
