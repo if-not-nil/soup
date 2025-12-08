@@ -21,16 +21,39 @@ macro_rules! measure {
 /// death helpers
 ///
 
+macro_rules! make_colors {
+    ($name:ident { $($variant:ident = $code:expr),* $(,)? }) => {
+        pub enum $name {
+            $($variant),*
+        }
+
+        impl $name {
+            pub fn code(&self) -> &str {
+                match self {
+                    $(Self::$variant => $code),*
+                }
+            }
+        }
+    };
+}
+
+make_colors!(Color {
+    Red = "1;31",
+    Blue = "1;34",
+    Green = "1;32",
+    Bold = "1;1",
+});
+
 pub fn err_pretty(message: impl Display) -> String {
-    color(message, "1;31") // bold red
+    paint(message, Color::Red) // bold red
 }
 
 pub fn num_blue(message: impl Display) -> String {
-    color(message, "1;34") // bold blue
+    paint(message, Color::Blue) // bold blue
 }
 
-pub fn color(message: impl Display, color_code: &str) -> String {
-    format!("\x1b[{}m{}\x1b[0m", color_code, message)
+pub fn paint(message: impl std::fmt::Display, color: Color) -> String {
+    format!("\x1b[{}m{}\x1b[0m", color.code(), message)
 }
 
 pub fn die_pretty(message: impl Display) -> ! {

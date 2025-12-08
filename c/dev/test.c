@@ -34,6 +34,7 @@ int test_string() {
 	string_pop(&arr, 2);
 	string_ensure_terminated(&arr);
 	printf("%s\n", arr.items);
+	free(arr.items);
 	return 0;
 }
 
