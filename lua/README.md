@@ -1,83 +1,68 @@
 # soup/lua
-this is a pure lua library for different stuff i've needed throughout using it
+a pure lua library for different stuff i've needed throughout using it
 
 to get started, get a copy of this directory and include soup.lua as soup
 
-```lua
-return {
-	Ok = Monads.Ok,
-	Err = Monads.Err,
-	println = fmt.println, -- print but it also unfolds tables
-	printf = fmt.printf,   -- print(format()) but with table unfolding 
-	unfold = fmt.unfold,   -- should print anything printable with color
-	match = require("match"),
-	misc = { -- all the fun but useless modules
-		lisp = require("lisp"),
-		writers = require("writers") -- cout and cin
-	}
-}
-```
-
-
-# the fun stuff
-    
-## a lisp (VERY wip)
-```lua
-Lisp {
-	{ lib.print, "hello ", "world\n",
-		{ lib.add, { lib.add, 59, 1 }, 7 }, "\n" },
-	{ lib.print, { lib.match,
-		{ lib.as, { lib.input, "yo\n> " }, "number" },
-		{ 6,      "six" },
-		{ 7,      "seven" },
-		{ 67,     "six seveeen" },
-		":(" -- default case
-	}, "\n" }
-}
-```
+# future goals
+- [ ] extend monads and the Result table to be more useful, wrap some of the default library in it so that the cloudflare lua incident doesn't happen again
+- [ ] iterators (that can be chained)
+- [ ] socket and http libraries (either via luajit ffi wrappers or a single c file you have to build yourself)
+- [ ] make the lisp useful
+	- [ ] return from expressions
+    - [ ] a better way to use tables inside of it
+	- [ ] macro system
+	- [ ] make terse when serialized
 
 # the useful stuff
 
-## modern-ish monads
+## table pretty printing (soup.unfold)
+<img width="159" height="140" src="https://github.com/user-attachments/assets/87e084c8-4acb-4cb3-b598-991bad03871a" />
+
+## modern-ish monads (soup.monad)
 
 ```lua
-local std = require "std"
-local monad, Ok, Err = (function(m)
-    return m.monad, m.Ok, m.Err
-end)(require "monads")
+local monad = soup.monad
+local Ok = soup.Ok
+local Err = soup.Err
 
-monad():and_then(function()
-    return Ok("should be alright")
-end):and_then(function(last)
-    print(last) -- prints "should be alright"
-    return "ok again" -- converted to Ok() implicitly
-end):and_then(function(last)
-    print(last)
-    return Err("idk dawg")
+local get_first_line = monad():and_then(function(filename)
+	local file, err = io.open(filename, "r")
+	if err then return Err(err) end
+
+	return Ok(file)
+end):and_then(function(file)
+	local line = file:read("l")
+	return line -- converted to Ok() implicitly
+end):and_then(function(line)
+	local without_spaces = string.gsub(line, "%s+", "")
+	return Ok(without_spaces)
 end):unwrap(function(err)
-    print(err)
-    std.printf("error caught: %s", err)
-end):exec()
+	print(err)
+	soup.printf("error caught: %s", err)
+	return Err(err)
+end)
+
+soup.println("got a line: ", get_first_line("soup.lua"))
 ```
 
-## match in O(1) (unless you're using a predicate)
+## match in O(1) and/or with guards (soup.match)
 
 ```lua
-local m = match()
-    :case(6, "six")
-    :case(7, "seven")
-    :case(67, "six seven")
-    :case(function(x) return x % 2 == 0 end, "even")
-    :case(function(x) return x % 2 ~= 0 end, "odd") -- you can add anything that can be called but it'd be a little too verbose for a demonstration
-    :otherwise("idk")
- -- (6) -- this will execute it immediately
- -- :match(6) -- this too
+local m = soup.match()
+	:case(6, "six")
+	:case(7, "seveen")
+	:case(function(x) return x % 2 == 0 end, "even")
+	:case(function(x) return x % 2 ~= 0 end, "odd")
+	:otherwise("idk")
 
-std.println("6: ", m(6)) -- 6: six
-std.println("7: ", m(7)) -- 7: seven
-std.println("8: ", m(8)) -- 8: even
-std.println("9: ", m(9)) -- 9: odd
-std.println("67: ", m(67)) -- 67: six seven
+soup.println({
+	["6"] = m(6),
+	["7"] = m(7),
+	["9"] = m(9),
+	["17"] = m(10),
+})
+-- or as lisp for no reason
+Lisp { lib.print, { m, 6 } }
 ```
 
 or, if you scroll down futher through match.lua,
@@ -87,4 +72,28 @@ local res = -(match(value)
     | { 7, "seven" }
     | { 67, "six seven" }
     | "") -- this is called immediately 
-)```
+)
+```
+
+# the fun stuff
+    
+## a lisp (very wip) (soup.misc.lisp)
+```lua
+local Lisp = soup.misc.lisp
+local lib = Lisp.lib
+
+Lisp {
+	{ print, "hello ", "world\n",
+		{ lib.add, { lib.add, 59, 1 }, 7 }, "\n" },
+	{ soup.println, { a = "yo" } },
+	{ print, "matched and got ", { lib.match,
+		{ tonumber, { lib.input, "yo\n> " } },
+		{ 6,        "six" },
+		{ 7,        "seven" },
+		{ 67,       "six seveeen" },
+		":(" -- default case
+	}, "\n" }
+};
+```
+
+feel free to make any contributions!
