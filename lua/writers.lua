@@ -62,6 +62,7 @@ end
 local function make_reader(read_fn)
 	local t = {}
 	setmetatable(t, {
+		-- TODO: make it mutate tables its given
 		__shr = function(self, prompt) -- >>
 			if prompt then io.write(prompt) end
 			return read_fn()
@@ -70,6 +71,8 @@ local function make_reader(read_fn)
 	return t
 end
 
+
+M.endl = "\n" -- TODO: make it actually flush
 
 M.cin = make_reader(function()
 	return io.read "*l"
