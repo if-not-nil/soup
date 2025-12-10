@@ -1,65 +1,87 @@
 local soup = require("soup")
-local Lisp = soup.misc.lisp
-local lib = Lisp.lib
 
-Lisp { lib.print, "match statements!" }
-require("io")
+-- Lisp { lib.print, "match statements!" }
+-- require("io")
 ---
 --- match statements
 ---
-local m = soup.match()
-	:case(6, "six")
-	:case(7, "seveen")
-	:case(function(x) return x % 2 == 0 end, "even")
-	:case(function(x) return x % 2 ~= 0 end, "odd")
-	:otherwise("idk")
-
-soup.println({
-	["6"] = m(6),
-	["7"] = m(7),
-	["9"] = m(9),
-	["17"] = m(10),
-})
--- or as lisp for no reason
-Lisp { lib.print, { m, 6 } }
+-- local m = soup.match()
+-- 	:case(6, "six")
+-- 	:case(7, "seveen")
+-- 	:case(function(x) return x % 2 == 0 end, "even")
+-- 	:case(function(x) return x % 2 ~= 0 end, "odd")
+-- 	:otherwise("idk")
+--
+-- soup.println({
+-- 	["6"] = m(6),
+-- 	["7"] = m(7),
+-- 	["9"] = m(9),
+-- 	["17"] = m(10),
+-- })
+-- -- or as lisp for no reason
+-- Lisp { lib.print, { m, 6 } }
 
 ---
 --- lisp
 ---
-Lisp {
-	{ print, "hello ", "world\n",
-		{ lib.add, { lib.add, 59, 1 }, 7 }, "\n" },
-	{ soup.println, { a = "yo" } },
-	{ print, "matched and got ", { lib.match,
-		{ tonumber, { lib.input, "yo\n> " } },
-		{ 6,        "six" },
-		{ 7,        "seven" },
-		{ 67,       "six seveeen" },
-		":(" -- default case
-	}, "\n" }
-};
+-- local Lisp = soup.misc.lisp
+-- local lib = Lisp.lib
+-- Lisp {
+-- 	{ print, "hello ", "world\n",
+-- 		{ lib.add, { lib.add, 59, 1 }, 7 }, "\n" },
+-- 	{ soup.println, { a = "yo" } },
+-- 	{ print, "matched and got ", { lib.match,
+-- 		{ tonumber, { lib.input, "yo\n> " } },
+-- 		{ 6,        "six" },
+-- 		{ 7,        "seven" },
+-- 		{ 67,       "six seveeen" },
+-- 		":(" -- default case
+-- 	}, "\n" }
+-- };
 ---
---- monads
+--- result type
 ---
-local monad = soup.monad
-local Ok = soup.Ok
-local Err = soup.Err
+local Result = soup.result
 
-local get_first_line = monad():and_then(function(filename)
-	local file, err = io.open(filename, "r")
-	if err then return Err(err) end
+-- read the first line of the file soup.lua, returning an error if it fails
+local line <const> = Result.Ok("soup.lua")
+	:bind(function(filename)
+		local file, err = io.open(filename, "r")
+		if not file then
+			return Result.Err(err)
+		end
+		return Result.Ok(file)
+	end)
+	:bind(function(file)
+		local line = file:read("l")
+		if not line then
+			return Result.Err("file is empty")
+		end
+		return Result.Ok(line)
+	end)
+	:bind(function(line)
+		if #line < 4 then
+			return Result.Err("line too short")
+		end
+		local without_spaces = line:gsub("%s+", "")
+		return Result.Ok(without_spaces)
+	end)
+    -- you can uncomment one of the following methods to unwrap
+    -- :unwrap()
+	-- :unwrap_or_else(function(err)
+	-- 	print("Error:", err)
+	-- 	soup.printf("error caught: %s", err)
+	-- 	return err
+	-- end)
 
-	return Ok(file)
-end):and_then(function(file)
-	local line = file:read("l")
-	return line -- converted to Ok() implicitly
-end):and_then(function(line)
-	local without_spaces = string.gsub(line, "%s+", "")
-	return Ok(without_spaces)
-end):unwrap(function(err)
-	print(err)
-	soup.printf("error caught: %s", err)
-	return Err(err)
-end)
+-- if its successful
+soup.println("got a line: ", line) -- got a line: {
+								   --  ok = true,
+								   --  value = "--exportingeverythingandflatteningit",
+								   --}
 
-soup.println("got a line: ", get_first_line("soup.lua"))
+-- if its an error
+soup.println("got a line: ", line) -- got a line: {
+								   --   ok = false,
+								   --   error = "line too short",
+								   -- }
