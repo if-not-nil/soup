@@ -1,6 +1,24 @@
 # soup/lua
 this is a pure lua library for different stuff i've needed throughout using it
 
+to get started, get a copy of this directory and include soup.lua as soup
+
+```lua
+return {
+	Ok = Monads.Ok,
+	Err = Monads.Err,
+	println = fmt.println, -- print but it also unfolds tables
+	printf = fmt.printf,   -- print(format()) but with table unfolding 
+	unfold = fmt.unfold,   -- should print anything printable with color
+	match = require("match"),
+	misc = { -- all the fun but useless modules
+		lisp = require("lisp"),
+		writers = require("writers") -- cout and cin
+	}
+}
+```
+
+
 # the fun stuff
     
 ## a lisp (VERY wip)
