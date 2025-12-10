@@ -1,0 +1,30 @@
+local soup = require("soup")
+-- local std            = require("std")
+--
+-- local monad, Ok, Err = (function(m)
+-- 	return m.monad, m.Ok, m.Err
+-- end)(require "monads")
+--
+-- local chain          = monad()
+-- 	:and_then(function(arg)
+-- 		std.println("called with ", arg)
+-- 		local file, err = io.open("./main.lua")
+-- 		if err then return Err(err) end
+-- 		return Ok(file)
+-- 	end)
+-- 	:and_then(function(file)
+-- 		local contents, err =
+-- 			file:read("l")
+-- 		if not contents then
+-- 			return Err(err)
+-- 		end
+-- 		return Ok(contents)
+-- 	end):unwrap(function(err)
+-- 		std.println("error: ", err)
+-- 		return ":("
+-- 	end):checker(function(result)
+-- 		std.println("current result: ", result.value)
+-- 	end)
+--
+--
+-- std.println(chain())
