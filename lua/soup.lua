@@ -7,8 +7,7 @@ return {
 	printf = fmt.printf,
 	unfold = fmt.unfold,
 	match = require("match"),
-	misc = {
-		lisp = require("lisp"),
-		writers = require("writers")
-	}
+	cout = require("cout"),
+	lisp = require("lisp").Expression,
+	lisp_lib = require("lisp").lib,
 }
