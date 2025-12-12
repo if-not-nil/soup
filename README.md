@@ -1,12 +1,20 @@
 # the soup files
 i have a ton of code i reuse entirely too much, so i've collected them here, each in their respective folder
 
-    - [what it does](#what-it-does)
-    - [usage (c)](#usage-c)
+- [lua](#lua)
+- [what it does](#what-it-does)
+    - [c]
+- [usage (c)](#usage-c)
 - [usage (rust)](#usage-rust)
 
-## what it does
-### c
+# lua
+refer to [./lua](./lua)
+## usage
+copy-paste one of the files into your project and require it. the useful ones have no dependencies (unless you absolutely have to have them)
+
+or, you can get a copy of the whole directory and include `soup.lua` 
+
+# c
 ```c
 "dynamic array macros";
     soup_arr(int);              // for a generic type, as soup_int_arr
@@ -19,7 +27,7 @@ i have a ton of code i reuse entirely too much, so i've collected them here, eac
         printf("after shrink: size %lu\n", arr.capacity);
         return 0;
     }
-    "named arrays";
+"named array macros";
     soup_arr_named(char, string);
     void strings() {
         string arr = string_init(8);
@@ -34,7 +42,12 @@ i have a ton of code i reuse entirely too much, so i've collected them here, eac
     }
 
 ```
-### rust
+## usage
+you're supposed to directly use the header file
+```wget https://raw.githubusercontent.com/if-not-nil/soup/refs/heads/main/c/soup.h```
+and then import it
+
+# rust
 ```rust
 "measure elapsed time";
     let (res, elapsed) = soup::measure!(long_operation()); // elapsed macro
@@ -45,12 +58,7 @@ i have a ton of code i reuse entirely too much, so i've collected them here, eac
     let input_file = file_or_die("./input.in");
 ```
 
-## usage (c)
-you're supposed to directly use the header file
-```wget https://raw.githubusercontent.com/if-not-nil/soup/refs/heads/main/c/soup.h```
-and then import it
-
-## usage (rust)
+## usage
 cargo, surprisingly, doesn't require the crate to be at the root of the
 repository. that means, you can just run
 ```sh
