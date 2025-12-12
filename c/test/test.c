@@ -33,8 +33,8 @@ void test_int_arr() {
 	// printf("after shrink: size %lu\n", arr.capacity);
 }
 
-soup_arr_named(char, string);
-soup_arr_display(string, "%c");
+soup_define_string( string);
+// soup_arr_display(string, "%c");
 
 // basic array functions are tested in test_int_arr
 void test_string() {
@@ -42,7 +42,7 @@ void test_string() {
 #define isterminated assert(arr.items[arr.count] == '\0');
 	string_push(&arr, 'a');
 	isterminated;
-	string_append(&arr, "hello world", 12);
+	string_append(&arr, "hello world");
 	isterminated;
 	string_push(&arr, 'b');
 	isterminated;

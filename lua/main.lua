@@ -21,13 +21,12 @@ local m = soup.match()
 
 m(6)()
 
-
 ---
 --- lisp
 ---
 local Lisp = soup.lisp()
 local lib = soup.lisp_lib
-Lisp { print, { lib.mul, 6, 10 } }
+Lisp { print, { lib.mul, 6, 10 } };
 Lisp {
 	{ print, "hello ", "world\n",
 		{ lib.add, { lib.add, 59, 1 }, 7 }, "\n" },

@@ -99,6 +99,8 @@ end
 ---@param tbl table
 ---@param indent? number
 function M.unfold(tbl, indent)
+	-- BUG: just array with no non-numeric keys have the closing bracket on a new line
+	-- TODO: print the metatables for whatever u pass in
 	if type(tbl) ~= "table" then
 		if type(tbl) == "number" then
 			return colorize(tbl, "number")
