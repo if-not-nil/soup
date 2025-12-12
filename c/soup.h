@@ -1,6 +1,10 @@
 #ifndef INCLUDE_SOUP
 #define INCLUDE_SOUP
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <memory.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -303,3 +307,7 @@ typedef struct {
 } _block_defer_dummy;
 
 #define block_defer(start, end) for (int _i_ = (start, 0); !_i_; _i_++, end)
+
+#ifdef __cplusplus
+}
+#endif
