@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 declare -a cmds=(
-	"cc -Wall --std=c23 ./asdf.c -o /tmp/soup_test"
+	"cc -Wall --std=c23 ./test.c -o /tmp/soup_test"
 	"/tmp/soup_test"
 )
 
