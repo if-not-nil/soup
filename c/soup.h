@@ -5,7 +5,21 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#if defined(__GNUC__) || defined(__clang__)
+// idk why clangd tells me both are defined
+#define _soup_boilerplate __attribute__((unused)) static inline
+#elif defined(_MSC_VER)
+// just suppresses the warning
+#define _soup_boilerplate __inline
+#else
+// only tcc doesn't have this so this is far enough
+#if defined(__cplusplus) && __cplusplus >= 201703L
 #define _soup_boilerplate [[maybe_unused]] static inline
+#else
+#define _soup_boilerplate static inline
+#endif
+#endif
 
 _soup_boilerplate void die(int pred, const char *message) {
 	if (pred) {
