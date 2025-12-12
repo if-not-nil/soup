@@ -2,10 +2,9 @@
 i have a ton of code i reuse entirely too much, so i've collected them here, each in their respective folder
 
 - [lua](#lua)
-- [what it does](#what-it-does)
-    - [c]
-- [usage (c)](#usage-c)
-- [usage (rust)](#usage-rust)
+- [c](#c)
+- [rust](#rust)
+- [contributing](#contributing)
 
 # lua
 refer to [./lua](./lua)
@@ -70,3 +69,9 @@ or add it directly to your `cargo.toml`
 [dependencies]
 soup = { git = "https://github.com/if-not-nil/soup" }
 ```
+
+# contributing
+
+feel free to make any issues or pull requests. can be a fix, a suggestion, a comment, a discussion, a request, or anything else you want to add to this
+
+just make sure the title is `[language] rest of the title`
