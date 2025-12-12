@@ -1,5 +1,6 @@
 return function()
 	local t = { cases = {}, predicates = {}, default = nil }
+	-- TODO: deep equality checks between tables
 
 	function t:case(key, result)
 		if (type(key) == "function")

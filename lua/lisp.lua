@@ -13,7 +13,6 @@
 -- 	}, "\n" }
 -- }
 --
--- local std = require("std")
 local M = {}
 M.lib = {
 	print = function(...) print(...) end,
@@ -55,6 +54,7 @@ M.lib = {
 		return tbl
 	end
 }
+
 local function eval_list(list)
 	if type(list) ~= "table" then
 		return list -- atoms

@@ -14,6 +14,8 @@ to get started, get a copy of this directory and include soup.lua as soup
 
 # the useful stuff
 
+## a testing/benchmarking framework (soup.test)
+
 ## table pretty printing (soup.unfold)
 <img width="159" height="140" src="https://github.com/user-attachments/assets/87e084c8-4acb-4cb3-b598-991bad03871a" />
 
