@@ -276,3 +276,30 @@ _soup_boilerplate void die(int pred, const char *message) {
 	_soup_string_pop_fn(name);                                                 \
 	_soup_string_shrink_fn(name);
 #endif
+
+/*
+ * defer macro
+ */
+
+// typedef void (*_defer_func)(void *);
+// static inline void _defer_cleanup(void *fn) {
+// 	_defer_func f = *(_defer_func *)fn;
+// 	f(NULL);
+// }
+
+typedef void (*_defer_func)(void *);
+
+static inline void _defer_cleanup(void *fn) {
+	_defer_func f = *(_defer_func *)fn;
+	f(NULL);
+}
+
+#define defer(fn)                                                              \
+	__attribute__((                                                            \
+		cleanup(_defer_cleanup))) _defer_func _defer_##__COUNTER__ = fn
+
+typedef struct {
+	int _;
+} _block_defer_dummy;
+
+#define block_defer(start, end) for (int _i_ = (start, 0); !_i_; _i_++, end)

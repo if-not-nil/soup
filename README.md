@@ -40,6 +40,19 @@ or, you can get a copy of the whole directory and include `soup.lua`
         free(arr.items);
     }
 
+"defer and block_defer macros";
+    void bye(void *_) { printf("bye!\n"); }
+
+	defer(bye); // simple defer function
+	FILE *f = fopen("test.c", "r");
+
+    // classic block defer
+	block_defer((void)0, fclose(f)) { 
+		char line[256];
+		fgets(line, sizeof(line), f); // file is still open here
+		printf("first line: %s", line);
+    } // and gets closed here
+	assert(fclose(f) == EOF); // second close will fail
 ```
 ## usage
 you're supposed to directly use the header file
