@@ -3,8 +3,14 @@ a pure lua library for different stuff i've needed throughout using it
 
 to get started, get a copy of this directory and include soup.lua as soup
 
+## the ./dev/ directory
+this is where i experiment with stuff and keep examples. currently trying to do
+tagged unions, packing unique data into the smallest space possible and doing
+rust's traits and list comprehension
+
 # future goals
-- [ ] extend monads and the Result table to be more useful, wrap some of the default library in it so that the cloudflare lua incident doesn't happen again
+- [x] extend monads and the Result table to be more useful
+    - [ ] wrap some of the default library in it so that the cloudflare lua incident doesn't happen again
 - [ ] iterators (that can be chained)
 - [ ] socket and http libraries (either via luajit ffi wrappers or a single c file you have to build yourself)
 - [ ] make the lisp useful

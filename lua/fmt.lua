@@ -147,8 +147,11 @@ function M.unfold(tbl, indent)
 		ret = string.format("%s\n%s%s = %s,", ret, string.rep("  ", indent + 1), keyStr, valueStr)
 	end
 
-	-- final line
-	ret = string.format("%s\n%s}", ret, prefix)
+	if #strs > 0 then
+		ret = string.format("%s\n%s}\n", ret, prefix)
+	else
+		ret = ret .. " }\n"
+	end
 	return ret
 end
 
