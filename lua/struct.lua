@@ -4,19 +4,18 @@
 -- 	{ "x", "number" },
 -- 	{ "y", "number" }
 -- }
+-- local p1 = Point { 22, 33 }
+-- assert(p1[7] == nil)
+-- assert(p1.type == Point)
 --
 -- Line = struct {
 -- 	{ "start", Point },
 -- 	{ "end",   Point }
 -- }
--- Email = struct { "string" }
---
--- local p1 = Point { 22, 33 }
--- assert(p1[7] == nil)
--- assert(p1.type == Point)
 -- local p2 = Point { 44, 55 }
 -- local l = Line { p1, p2 }
 --
+-- Email = struct { "string" }
 -- local email = Email("test@example.com")
 -- assert(email[1] == "test@example.com")
 --
