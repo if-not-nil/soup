@@ -47,6 +47,7 @@ this is a very sane approach that is very readable and is perfect in any sane co
 
 but it's definitely not a fun way to do things
 
+> we're now at commit 2e5fa: `lua: structs work at a minimum-wage level`
 so i've decided to come up with this method
 ```lua
 Point = struct { x = "number", y = "number" }
@@ -61,6 +62,52 @@ and the resulting structs looks like
 {Point, 5, 5}
 ```
 
-so, how is it better than the conventional methods?
+if you try and make a point of 2 and "asdf", it's gonna give you an error, which was the initial idea here
 
-first of all, a constructor is made automatically. it checks all the types
+**implementation details warning!!!!!**
+
+<details><summary><b> here </b></summary>
+point here is a struct which stores those tables
+
+```lua
+local names, -- struct names: x and y 
+      types, -- types: number, number
+      index  -- indices: { x = 2, y = 1, }
+      = {}, {}, {}
+```
+
+is the index table really necessary? i don't really know
+
+but what's even worse is this line
+```lua
+table.sort(names) -- alphabetical
+```
+the named field order is kinda random in lua. when you try and index {x=nil, y=nil}, it might give you either x or y first.
+another way to fix this would be making the user do
+```lua
+Point = struct { {"x", "number"}, {"y", "number"} }
+```
+which is ugly
+
+so, putting all the sacrifices together lets me make a nice little oneliner
+```lua
+__index = function(tbl, key) return key and tbl[self.index[key]] end
+```
+and now we can get `point.x` and `point.y`, which asks the underlying type to tell it where x and y are
+
+</details>
+so, how is it different from the sane way?
+
+first of all, a constructor is made automatically. it checks all the types when creating a struct
+and you don't have to add the `if type(tbl[1]) == "string"`
+
+structs can also be embedded inside eachother
+
+```lua
+local l = Line {
+    Point { 11, 22 },
+    Point { 33, 44 }
+}
+
+assert(l[0] == Line)
+```

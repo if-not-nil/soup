@@ -7,31 +7,29 @@ do
 	-- this implementation is wayy to noisy when printing
 	local function struct(fields)
 		local names, types, index = {}, {}, {}
-		for k, v in pairs(fields) do
-			index[k] = #types + 1
-			names[#names + 1], types[#types + 1] = k, v
+		for k in pairs(fields) do
+			table.insert(names, k)
 		end
-
+		table.sort(names) -- alphabetical
+		for i, name in ipairs(names) do
+			types[i] = fields[name]
+			index[name] = i
+		end
 		return setmetatable({ types = types, index = index }, {
 			__call = function(self, new)
-				assert(#new == #self.types)
-				for i = 1, #new do
+				assert(#new == #self.types, "field count mismatch")
+				for i, v in ipairs(new) do
 					local t = self.types[i]
-					local v = new[i]
-
 					if type(t) == "string" then
-						assert(type(v) == t, ("expected type %s at position %d, got %s"):format(t, i, type(v)))
+						assert(type(v) == t, ("expected %s at %d, got %s"):format(t, i, type(v)))
 					else
-						-- js assume its a struct and check identity via [0]
-						assert(v[0] == t, ("expected struct at position %d"):format(i))
+						assert(v[0] == t, ("expected struct at %d"):format(i))
 					end
 				end
-
-				-- identity lives at index 0
 				new[0] = self
-				-- this just hijacks indexing lmao
 				return setmetatable(new, {
-					__index = self.index
+					__newindex = function() error("struct is immutable") end,
+					__index = function(tbl, key) return key and tbl[self.index[key]] end
 				})
 			end
 		})
@@ -39,14 +37,21 @@ do
 
 	Point = struct { x = "number", y = "number" }
 	local p1 = Point { 11, 22 }
-	local p2 = Point { 33, 44 }
+	println("p1: x", p1.x, ", y", p1.y)
+	println("p1: ", p1)
 
-	println(p1)
-	Line = struct { ["start"] = Point, ["end"] = Point }
-	local l = Line { p1, p2 }
+	-- local p2 = Point { 33, 44 }
+	-- println(p1)
+	-- Line = struct {
+	-- 	["start"] = Point,
+	-- 	["end"] = Point
+	-- }
+	-- local l = Line {
+	-- 	Point { 11, 22 },
+	-- 	Point { 33, 44 }
+	-- }
 
-	assert(l[0] == Line)
-	println("p1: ", p1[p1.x], ", ", p1[p1.y])
+	-- assert(l[0] == Line)
 end
 -- local println = fmt.println
 -- -- tag identity
