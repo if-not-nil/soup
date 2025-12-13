@@ -5,7 +5,7 @@
 clone the `soup/` directory somewhere on your `package.path`
 
 ```lua
-local soup = require("soup")
+local soup = require("init")
 ```
 
 ## toc
