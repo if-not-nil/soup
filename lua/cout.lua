@@ -40,23 +40,25 @@ setmetatable(M, {
 	end
 })
 
-local function make_chain(value)
-	return setmetatable({ buffer = tostring(value) }, {
-		__shr = function(self, other)
-			if type(other) == "table" and getmetatable(other) and getmetatable(other).__shl then
-				-- send buffer to cout object
-				return other << self.buffer
-			else
-				-- accumulate string
-				self.buffer = self.buffer .. tostring(other)
-				return self
+function M.infest_strings()
+	local function make_chain(value)
+		return setmetatable({ buffer = tostring(value) }, {
+			__shr = function(self, other)
+				if type(other) == "table" and getmetatable(other) and getmetatable(other).__shl then
+					-- send buffer to cout object
+					return other << self.buffer
+				else
+					-- accumulate string
+					self.buffer = self.buffer .. tostring(other)
+					return self
+				end
 			end
-		end
-	})
-end
-local string_mt = debug.getmetatable("")
-string_mt.__shr = function(str, other)
-	return make_chain(str) >> other
+		})
+	end
+	local string_mt = debug.getmetatable("")
+	string_mt.__shr = function(str, other)
+		return make_chain(str) >> other
+	end
 end
 
 return M

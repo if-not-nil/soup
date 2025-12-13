@@ -1,7 +1,23 @@
 # soup/lua
-a pure lua library for different stuff i've needed throughout using it
+> making lua do what it shouldn't
 
-to get started, get a copy of this directory and include soup.lua as soup
+## usage
+clone the `soup/` directory somewhere on your `package.path`
+
+```lua
+local soup = require("soup")
+```
+
+## toc
+- [the useful stuff](#the-useful-stuff)
+  - [soup.struct: type-safe structs](#soupstruct-type-safe-structs)
+  - [soup.unfold: table pretty printing](#soupunfold-table-pretty-printing)
+  - [soup.result: a Result structure](#soupresult-a-result-structure)
+  - [soup.match: reusable match with guards](#soupmatch-reusable-match-with-guards)
+- [the fun stuff (don't use)](#the-fun-stuff-dont-use)
+  - [soup.lisp: a lisp (wip)](#souplisp-a-lisp-wip)
+  - [soup.cout: stream style printing](#soupcout-stream-style-printing)
+- [contributing](#contributing)
 
 ## the ./dev/ directory
 this is where i experiment with stuff and keep examples. currently trying to do
@@ -14,10 +30,13 @@ rust's traits and list comprehension
 - [ ] iterators (that can be chained)
 - [ ] socket and http libraries (either via luajit ffi wrappers or a single c file you have to build yourself)
 - [ ] methods and traits on structs
+- [x] typesafe-ish structs
+    - [ ] methods
+    - [ ] traits
 
 # the useful stuff
 
-## type-safe structs (soup.struct)
+## soup.struct: type-safe structs
 ```lua
 Point = struct {
 	{ "x", "number" },
@@ -41,11 +60,12 @@ assert(email[1] == "test@example.com")
 
 assert(l.type == Line)
 ```
+note that slot the type information is stored in slot 0
 
-## table pretty printing (soup.unfold)
+## soup.unfold: table pretty printing 
 <img width="159" height="140" src="https://github.com/user-attachments/assets/87e084c8-4acb-4cb3-b598-991bad03871a" />
 
-## a Result structure (soup.result)
+## soup.result: a Result structure 
 
 ```lua
 local Result = soup.result
@@ -93,8 +113,19 @@ soup.println("got a line: ", line) -- got a line: {
 								   --   error = "line too short",
 								   -- }
 ```
+**semantics**
 
-## match in O(1) and/or with guards (soup.match)
+- `bind(f)` expects `f :: value -> Result`
+- exceptions inside `bind` / `map` are caught and converted to `Err`
+- `unwrap()` throws
+- `unwrap_or` never throws
+
+## soup.match: reusable match with guards
+**semantics**
+
+- literal key matches are O(1)
+- predicate cases are checked linearly
+- first matching predicate wins
 
 ```lua
 local m = soup.match()
@@ -124,11 +155,11 @@ local res = -(match(value)
 )
 ```
 
-# the fun stuff
+# the fun stuff (don't use)
     
-## a lisp (very wip) (soup.misc.lisp)
+## soup.lisp: a lisp (wip)
 ```lua
-local Lisp = soup.misc.lisp
+local Lisp = soup.lisp
 local lib = Lisp.lib
 
 Lisp {
@@ -145,4 +176,17 @@ Lisp {
 };
 ```
 
+## soup.cout: stream style printing
+```lua
+local cout = soup.cout
+cout.infest_strings() -- to `"asdf" << cout`
+cout << "hi" << cout.endl
+"hi" >> cout.endl >> cout 
+"hi" >> cout << cout.endl 
+```
+
+# contributing
 feel free to make any contributions!
+
+- if you made something cool but it's not ready yet, put it in `./dev/`
+- keep dependencies minimal
