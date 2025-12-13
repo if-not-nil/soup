@@ -20,6 +20,31 @@ rust's traits and list comprehension
 
 # the useful stuff
 
+## type-safe structs (soup.struct)
+```lua
+Point = struct {
+	{ "x", "number" },
+	{ "y", "number" }
+}
+
+Line = struct {
+	{ "start", Point },
+	{ "end",   Point }
+}
+Email = struct { "string" }
+
+local p1 = Point { 22, 33 }
+assert(p1[7] == nil)
+assert(p1.type == Point)
+local p2 = Point { 44, 55 }
+local l = Line { p1, p2 }
+
+local email = Email("test@example.com")
+assert(email[1] == "test@example.com")
+
+assert(l.type == Line)
+```
+
 ## a testing/benchmarking framework (soup.test)
 
 ## table pretty printing (soup.unfold)
