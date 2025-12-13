@@ -1,3 +1,9 @@
+-- result.lua --
+--
+-- a rusty result union
+--
+-- part of the soup files
+-- https://github.com/if-not-nil/soup
 local Result = {}
 Result.__index = Result
 

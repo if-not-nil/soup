@@ -13,10 +13,7 @@ rust's traits and list comprehension
     - [ ] wrap some of the default library in it so that the cloudflare lua incident doesn't happen again
 - [ ] iterators (that can be chained)
 - [ ] socket and http libraries (either via luajit ffi wrappers or a single c file you have to build yourself)
-- [ ] make the lisp useful
-	- [ ] return from expressions
-    - [ ] a better way to use tables inside of it
-	- [ ] macro system
+- [ ] methods and traits on structs
 
 # the useful stuff
 
@@ -45,12 +42,10 @@ assert(email[1] == "test@example.com")
 assert(l.type == Line)
 ```
 
-## a testing/benchmarking framework (soup.test)
-
 ## table pretty printing (soup.unfold)
 <img width="159" height="140" src="https://github.com/user-attachments/assets/87e084c8-4acb-4cb3-b598-991bad03871a" />
 
-## a Result structure (soup.monad)
+## a Result structure (soup.result)
 
 ```lua
 local Result = soup.result

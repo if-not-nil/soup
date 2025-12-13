@@ -1,25 +1,31 @@
--- struct.lua
+-- struct.lua --
 --
--- Point = struct {
--- 	{ "x", "number" },
--- 	{ "y", "number" }
--- }
--- local p1 = Point { 22, 33 }
--- assert(p1[7] == nil)
--- assert(p1.type == Point)
+-- typesafe structs
 --
--- Line = struct {
--- 	{ "start", Point },
--- 	{ "end",   Point }
--- }
--- local p2 = Point { 44, 55 }
--- local l = Line { p1, p2 }
+-- usage:
+--     Point = struct {
+--     	{ "x", "number" },
+--     	{ "y", "number" }
+--     }
+--     local p1 = Point { 22, 33 }
+--     assert(p1[7] == nil)
+--     assert(p1.type == Point)
+--    
+--     Line = struct {
+--     	{ "start", Point },
+--     	{ "end",   Point }
+--     }
+--     local p2 = Point { 44, 55 }
+--     local l = Line { p1, p2 }
+--    
+--     Email = struct { "string" }
+--     local email = Email("test@example.com")
+--     assert(email[1] == "test@example.com")
+--    
+--     assert(l.type == Line)
 --
--- Email = struct { "string" }
--- local email = Email("test@example.com")
--- assert(email[1] == "test@example.com")
---
--- assert(l.type == Line)
+-- part of the soup files
+-- https://github.com/if-not-nil/soup
 return function(fields)
 	local types, index = {}, {}
 	for i, field in ipairs(fields) do

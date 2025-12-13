@@ -1,4 +1,9 @@
--- exporting everything and flattening it
+-- soup.lua --
+--
+-- exports the whole module
+--
+-- part of the soup files
+-- https://github.com/if-not-nil/soup
 local fmt = require("fmt")
 
 return {

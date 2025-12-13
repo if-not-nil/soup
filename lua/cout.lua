@@ -1,3 +1,13 @@
+-- cout.lua --
+--
+-- funny printer
+--
+-- cout << 'asdf' << cout.endl
+-- 'asdf' >> cout
+-- 'asdf' >> cout << cout.endl
+--
+-- part of the soup files
+-- https://github.com/if-not-nil/soup
 local M = { endl = {} }
 
 setmetatable(M, {

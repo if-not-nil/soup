@@ -1,18 +1,9 @@
--- a small wip lisp
+-- lisp.lua --
 --
--- Lisp {
--- 	{ lib.print, "hello ", "world\n",
--- 		{ lib.add, { lib.add, 59, 1 }, 7 }, "\n" },
--- 	{ std.println, {  a = "yo"  } },
--- 	{ lib.print, { lib.match,
--- 		{ lib.as, { lib.input, "yo\n> " }, "number" },
--- 		{ 6,      "six" },
--- 		{ 7,      "seven" },
--- 		{ 67,     "six seveeen" },
--- 		":(" -- default case
--- 	}, "\n" }
--- }
+-- a bad lisp interpreter
 --
+-- part of the soup files
+-- https://github.com/if-not-nil/soup
 local M = {}
 M.lib = {
 	print = function(...) print(...) end,

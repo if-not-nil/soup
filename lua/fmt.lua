@@ -1,3 +1,9 @@
+-- fmt.lua --
+--
+-- formatting utilities
+--
+-- part of the soup files
+-- https://github.com/if-not-nil/soup
 local M = {}
 
 ---@param ... any
