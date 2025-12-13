@@ -1,24 +1,52 @@
 package.path = package.path .. ";../?.lua"
 local fmt = require("fmt")
 local println = fmt.println
-do -- structs
-	local struct = function(fields)
-		local t = fields
-		setmetatable(t, {
-			__call = function(self, a)
-				println(a, self, #a, #self)
-				if #a ~= #self then error("length doesnt match") end
-				for i, v in ipairs(a) do assert(type(v) == self[i]) end
-				return { self, table.unpack(a) }
-			end,
+
+do
+	-- structs
+	-- this implementation is wayy to noisy when printing
+	local function struct(fields)
+		local names, types, index = {}, {}, {}
+		for k, v in pairs(fields) do
+			index[k] = #types + 1
+			names[#names + 1], types[#types + 1] = k, v
+		end
+
+		return setmetatable({ types = types, index = index }, {
+			__call = function(self, new)
+				assert(#new == #self.types)
+				for i = 1, #new do
+					local t = self.types[i]
+					local v = new[i]
+
+					if type(t) == "string" then
+						assert(type(v) == t, ("expected type %s at position %d, got %s"):format(t, i, type(v)))
+					else
+						-- js assume its a struct and check identity via [0]
+						assert(v[0] == t, ("expected struct at position %d"):format(i))
+					end
+				end
+
+				-- identity lives at index 0
+				new[0] = self
+				-- this just hijacks indexing lmao
+				return setmetatable(new, {
+					__index = self.index
+				})
+			end
 		})
-		return t
 	end
-	Line = struct {
-		x1 = "number", y1 = "number",
-		x2 = "number", y2 = "number"
-	}
-	Line { 1, 5, 3, 1 }
+
+	Point = struct { x = "number", y = "number" }
+	local p1 = Point { 11, 22 }
+	local p2 = Point { 33, 44 }
+
+	println(p1)
+	Line = struct { ["start"] = Point, ["end"] = Point }
+	local l = Line { p1, p2 }
+
+	assert(l[0] == Line)
+	println("p1: ", p1[p1.x], ", ", p1[p1.y])
 end
 -- local println = fmt.println
 -- -- tag identity

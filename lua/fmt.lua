@@ -133,7 +133,9 @@ function M.unfold(tbl, indent)
 		local inline = {}
 		for _, k in ipairs(nums) do
 			local v = tbl[k]
-			table.insert(inline, type(v) == "table" and M.unfold(v, indent + 1) or colorize(v, type(v)))
+			table.insert(inline, type(v) == "table"
+				and M.unfold(v, indent + 1)
+				or colorize(v, type(v)))
 		end
 		ret = ret .. " " .. table.concat(inline, ", ") .. ','
 	end
@@ -148,9 +150,9 @@ function M.unfold(tbl, indent)
 	end
 
 	if #strs > 0 then
-		ret = string.format("%s\n%s}\n", ret, prefix)
+		ret = string.format("%s\n%s}", ret, prefix)
 	else
-		ret = ret .. " }\n"
+		ret = ret .. " }"
 	end
 	return ret
 end
