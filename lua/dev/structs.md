@@ -1,8 +1,24 @@
-# can c structs and rust traits be implemented with pure lua?
+# making actual structs in lua
 
-lua is a horrible, horrible language. it has one data structure for everything, which, god forbid, lets you 
+lua is a horrible, horrible language. it has one data structure for everything -
+the table, which i'll be exploiting here 
 
-# identity checking
+my main inspirations is the zig struct syntax
+```zig
+pub const Database = struct {
+    root: Directory,
+    pub fn init(alloc: std.mem.Allocator) !Database {
+        ...
+    }
+}; // this is from my project dbfs btw
+```
+
+which are nothing alike. and also just not realistic to implement at all. but
+i'll try hard enough to get motivated by the sunk cost fallacy
+
+# structs
+
+traits in rust only work because
 
 all tables in lua are always passed by reference, nevery by copy.
 
@@ -18,6 +34,7 @@ for _ = 1, 2 do
     print(l)
 end
 ```
+
 ```yaml
 first one:
     table: ...50c0
@@ -66,7 +83,6 @@ if you try and make a point of 2 and "asdf", it's gonna give you an error, which
 
 **implementation details warning!!!!!**
 
-<details><summary><b> here </b></summary>
 point here is a struct which stores those tables
 
 ```lua
@@ -95,7 +111,6 @@ __index = function(tbl, key) return key and tbl[self.index[key]] end
 ```
 and now we can get `point.x` and `point.y`, which asks the underlying type to tell it where x and y are
 
-</details>
 so, how is it different from the sane way?
 
 first of all, a constructor is made automatically. it checks all the types when creating a struct
@@ -110,4 +125,36 @@ local l = Line {
 }
 
 assert(l[0] == Line)
+```
+
+but what happens if you try to get `line.start.x`?
+
+remember how i struggled with getting a point's fields to always be in order? that still doesn't work.
+
+no matter how much you sort them, it'll still be unpredictable
+
+but it's not like i cared about it looking nice or anything. i'm not even that mad
+
+```lua
+Point = struct {
+    { "x", "number" },
+    { "y", "number" }
+}
+
+Line = struct {
+    { "start", Point },
+    { "end",   Point }
+}
+```
+
+so we have this syntax now
+
+time to rewrite the whole module to look ugly now
+
+but yeah, the implementation actually went down from about 32 lines to 20 (and it also doesn't look stupid)
+
+and, since we won't have duck typing, i'll allow for single-field structs to be initialized like this
+
+```lua
+Email = struct { "string" }
 ```
