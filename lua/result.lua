@@ -6,11 +6,11 @@
 -- https://github.com/if-not-nil/soup
 local setmetatable = setmetatable
 local error = error
+local pcall = pcall
 
 --
 -- Ok
 --
-
 local Ok_mt = {}
 Ok_mt.__index = Ok_mt
 
@@ -19,11 +19,19 @@ function Ok_mt.unwrap(self)
 end
 
 function Ok_mt.map(self, f)
-	return Ok(f(self[1]))
+	local ok, v = pcall(f, self[1])
+	if not ok then
+		return Err(v)
+	end
+	return Ok(v)
 end
 
 function Ok_mt.bind(self, f)
-	return f(self[1])
+	local ok, r = pcall(f, self[1])
+	if not ok then
+		return Err(r)
+	end
+	return r
 end
 
 function Ok_mt.unwrap_or(self, _)
@@ -41,7 +49,6 @@ end
 --
 -- Err
 --
-
 local Err_mt = {}
 Err_mt.__index = Err_mt
 
@@ -58,7 +65,11 @@ function Err_mt.bind(self, _)
 end
 
 function Err_mt.map_err(self, f)
-	return Err(f(self[1]))
+	local ok, e = pcall(f, self[1])
+	if not ok then
+		return Err(e)
+	end
+	return Err(e)
 end
 
 function Err_mt.unwrap_or(_, d)
@@ -66,17 +77,24 @@ function Err_mt.unwrap_or(_, d)
 end
 
 function Err_mt.unwrap_or_else(self, f)
-	return f(self[1])
+	local ok, v = pcall(f, self[1])
+	if not ok then
+		error(v, 2)
+	end
+	return v
 end
 
 function Err_mt.or_else(self, f)
-	return f(self[1])
+	local ok, r = pcall(f, self[1])
+	if not ok then
+		return Err(r)
+	end
+	return r
 end
 
 --
 -- constructors
 --
-
 function Ok(v)
 	return setmetatable({ v }, Ok_mt)
 end
