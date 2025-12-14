@@ -54,6 +54,10 @@ local p1 = Point { 22, 33 } -- {&Point, 22, 33}
 assert(p1.type == Point
     and p1.x == 22
     and p1.y == 33)
+Point:method("magnitude", function(self)
+	return math.sqrt(self.x ^ 2 + self.y ^ 2)
+end)
+print(point:magnitude())
 
 local email = parse_email("asdf@asdf.com"):unwrap()
 
@@ -167,16 +171,6 @@ soup.println({
 })
 -- or as lisp for no reason
 Lisp { lib.print, { m, 6 } }
-```
-
-or, if you scroll down futher through match.lua,
-```lua
-local res = -(match(value)
-    | { 6, "six" }
-    | { 7, "seven" }
-    | { 67, "six seven" }
-    | "") -- this is called immediately 
-)
 ```
 
 # the fun stuff (don't use)

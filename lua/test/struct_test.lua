@@ -1,5 +1,5 @@
 package.path = "../?.lua;" .. package.path
-local struct = require("init").struct
+local struct = require("struct")
 
 local function expect_error(f, msg)
 	local ok, err = pcall(f)
@@ -18,18 +18,20 @@ local Point <const> = struct {
 	{ "y", "number" },
 }
 
-local Line <const> = struct {
-	{ "start", Point },
-	{ "end",   Point },
-}
+Point:method("magnitude", function(self)
+	return math.sqrt(self.x ^ 2 + self.y ^ 2)
+end)
+
+local p = Point(3, 4)
+assert(p:magnitude() == 5)
 
 local p1 = Point { 22, 33 }
-local p2 = Point { 77, 12 }
-_ = Line { p1, p2 }
 
 assert(p1[1] == 22)
 assert(p1[2] == 33)
 assert(p1.x == 22)
+p1.x = 2; assert(p1.x == 2)
+p1.x = 22; assert(p1.x == 22)
 assert(p1.y == 33)
 assert(p1[7] == nil)
 assert(p1.type == Point)

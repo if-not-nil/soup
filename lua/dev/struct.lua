@@ -1,3 +1,5 @@
+package.path = "../?.lua;" .. package.path
+local println = require("fmt").println
 return function(fields)
 	local types, index = {}, {}
 	for i, field in ipairs(fields) do
@@ -40,7 +42,15 @@ return function(fields)
 	local struct_def = { types = types, index = index, methods = methods }
 
 	-- dynamic methods!
-	function struct_def:method(name, fn)
+	---@param name string|table string for method, table for trait
+	---@param fn function
+	function struct_def:impl(name, fn)
+		if type(name) == "table" then
+			for k, v in pairs(table) do
+			end
+			return
+		end
+		println(debug.getinfo(fn))
 		self.methods[name] = fn
 	end
 

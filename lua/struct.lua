@@ -26,6 +26,8 @@
 --
 -- part of the soup files
 -- https://github.com/if-not-nil/soup
+package.path = "../?.lua;" .. package.path
+local println = require("fmt").println
 return function(fields)
 	local types, index = {}, {}
 	for i, field in ipairs(fields) do
@@ -34,10 +36,47 @@ return function(fields)
 			index[field[1]] = i
 		else
 			types[i] = field
+			index[field] = i
 		end
 	end
 
-	return setmetatable({ types = types, index = index }, {
+	local methods = {}
+
+	-- shared for all structs
+	local struct_mt = {
+		__index = function(tbl, key)
+			if key == "type" then return rawget(tbl, 0) end
+			local i = index[key]
+			if i then return tbl[i] end
+			return methods[key]
+		end,
+		__tostring = function(tbl)
+			if #tbl == 1 then return tostring(tbl[1]) end
+			local parts = {}
+			for k, i in pairs(index) do
+				table.insert(parts, ("%s=%s"):format(k, tostring(tbl[i])))
+			end
+			return "{" .. table.concat(parts, ", ") .. "}"
+		end,
+		__eq = function(a, b)
+			if #a == 1 and type(b) ~= "table" then
+				return a[1] == b
+			end
+			return rawequal(a, b)
+		end,
+		__len = function() return #types end,
+	}
+
+	local struct_def = { types = types, index = index, methods = methods }
+
+	-- dynamic methods!
+	---@param menthod_name string
+	---@param fn function
+	function struct_def:method(menthod_name, fn)
+		self.methods[menthod_name] = fn
+	end
+
+	return setmetatable(struct_def, {
 		__call = function(self, ...)
 			local new = type(...) == "table" and ... or { ... }
 			assert(#new == #self.types, ("expected %d fields, got %d"):format(#self.types, #new))
@@ -52,31 +91,7 @@ return function(fields)
 			end
 
 			new[0] = self
-			return setmetatable(new, {
-				__len = function (tbl) return #rawget(tbl, 0)["types"] end,
-				__newindex = function() error("struct is immutable") end,
-				__index = function(tbl, key)
-					if key == "type" then return tbl[0] end
-					return self.index[key] and tbl[self.index[key]]
-				end,
-				__eq = function(a, b)
-					if #a == 1 and type(b) ~= "table" then
-						return a[1] == b
-					end
-					return rawequal(a, b)
-				end,
-				__tostring = function(tbl)
-					-- makes sense
-					if #tbl == 1 then
-						return tostring(tbl[1])
-					end
-					local parts = {}
-					for name, i in pairs(self.index) do
-						table.insert(parts, ("%s=%s"):format(name, tostring(tbl[i])))
-					end
-					return "{" .. table.concat(parts, ", ") .. "}"
-				end
-			})
+			return setmetatable(new, struct_mt)
 		end
 	})
 end

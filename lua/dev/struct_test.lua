@@ -19,6 +19,53 @@ local Point <const> = struct {
 	{ "y", "number" },
 }
 
+-- local Format = {
+-- 	methods = {
+-- 		format = {
+-- 			nparams = 2, -- self, writer
+-- 			isvararg = false
+-- 		}
+-- 	}
+-- }
+-- local Trait <const> = function(spec)
+-- 	local t = spec.fields and {spec.fields} or {}
+--
+--
+-- 	return {
+-- 		fields, methods
+-- 	}
+-- end
+--
+-- local Format = {
+-- 	{"function", nparams = 1, isvararg = false},
+-- 	{"field", x = "string"}
+-- }
+--
+--
+-- local ToString = {
+-- 	fields = {},
+-- 	methods = {
+-- 		to_string = {
+-- 			isvararg = false,
+-- 			nparams = 1, -- self
+-- 		}
+-- 	},
+-- 	auto_impl = {
+-- 		[Format] = function(self, writer)
+-- 		end
+-- 	}
+-- }
+--
+-- local HasPosition = {
+-- 	fields = { { "x", "number" }, { "y", "number" } }
+-- }
+--
+-- local Movable = {
+-- 	fields = { "x", "y" },
+-- 	methods = {
+-- 		move = "function"
+-- 	}
+-- }
 
 Point:method("magnitude", function(self)
 	return math.sqrt(self.x ^ 2 + self.y ^ 2)
