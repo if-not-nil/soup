@@ -4,85 +4,88 @@
 --
 -- part of the soup files
 -- https://github.com/if-not-nil/soup
-local Result = {}
-Result.__index = Result
+local setmetatable = setmetatable
+local error = error
 
-function Result.Ok(v)
-    return setmetatable({ ok = true, value = v }, Result)
+--
+-- Ok
+--
+
+local Ok_mt = {}
+Ok_mt.__index = Ok_mt
+
+function Ok_mt.unwrap(self)
+	return self[1]
 end
 
-function Result.Err(e)
-    return setmetatable({ ok = false, error = e }, Result)
+function Ok_mt.map(self, f)
+	return Ok(f(self[1]))
 end
 
-function Result:bind(f)
-    if self.ok then
-        local ok, r = pcall(f, self.value)
-        if not ok then
-            return Result.Err(r)
-        end
-        return r
-    else
-        return self
-    end
+function Ok_mt.bind(self, f)
+	return f(self[1])
 end
 
-function Result:map(f)
-    if self.ok then
-        local ok, v = pcall(f, self.value)
-        if not ok then
-            return Result.Err(v)
-        end
-        return Result.Ok(v)
-    else
-        return self
-    end
+function Ok_mt.unwrap_or(self, _)
+	return self[1]
 end
 
-function Result:map_err(f)
-    if not self.ok then
-        local ok, e = pcall(f, self.error)
-        if not ok then
-            return Result.Err(e)
-        end
-        return Result.Err(e)
-    else
-        return self
-    end
+function Ok_mt.unwrap_or_else(self, _)
+	return self[1]
 end
 
-function Result:unwrap_or(default)
-    return self.ok and self.value or default
+function Ok_mt.or_else(self, _)
+	return self
 end
 
-function Result:unwrap()
-    if self.ok then
-        return self.value
-    else
-        error(self.error, 2)
-    end
+--
+-- Err
+--
+
+local Err_mt = {}
+Err_mt.__index = Err_mt
+
+function Err_mt.unwrap(self)
+	error(self[1], 2)
 end
 
-function Result:unwrap_or_else(f)
-    if self.ok then
-        return self.value
-    end
-    local ok, v = pcall(f, self.error)
-    if not ok then
-        error(v, 2)
-    end
-    return v
+function Err_mt.map(self, _)
+	return self
 end
 
-function Result:or_else(f)
-    if self.ok then
-        return self
-    end
-    local ok, r = pcall(f, self.error)
-    if not ok then
-        return Result.Err(r)
-    end
-    return r
+function Err_mt.bind(self, _)
+	return self
 end
 
-return Result
+function Err_mt.map_err(self, f)
+	return Err(f(self[1]))
+end
+
+function Err_mt.unwrap_or(_, d)
+	return d
+end
+
+function Err_mt.unwrap_or_else(self, f)
+	return f(self[1])
+end
+
+function Err_mt.or_else(self, f)
+	return f(self[1])
+end
+
+--
+-- constructors
+--
+
+function Ok(v)
+	return setmetatable({ v }, Ok_mt)
+end
+
+function Err(e)
+	return setmetatable({ e }, Err_mt)
+end
+
+return {
+	Ok = Ok,
+	Err = Err,
+}

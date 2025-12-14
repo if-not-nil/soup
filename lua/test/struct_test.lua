@@ -13,12 +13,19 @@ local function expect_error(f, msg)
 end
 
 -- struct with named fields
-local Point = struct {
+local Point <const> = struct {
 	{ "x", "number" },
 	{ "y", "number" },
 }
 
+local Line <const> = struct {
+	{ "start", Point },
+	{ "end",   Point },
+}
+
 local p1 = Point { 22, 33 }
+local p2 = Point { 77, 12 }
+_ = Line { p1, p2 }
 
 assert(p1[1] == 22)
 assert(p1[2] == 33)
@@ -60,6 +67,7 @@ expect_error(function()
 end, "type mismatch")
 
 -- single-field struct
+
 local Email = struct { "string" }
 
 local e1 = Email("test@example.com")

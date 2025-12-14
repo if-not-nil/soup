@@ -38,6 +38,7 @@ rust's traits and list comprehension
 
 ## soup.struct: type-safe structs
 ```lua
+
 Point = struct {
 	{ "x", "number" },
 	{ "y", "number" }
@@ -49,9 +50,14 @@ Line = struct {
 }
 Email = struct { "string" }
 
-local p1 = Point { 22, 33 }
+local p1 = Point { 22, 33 } -- {&Point, 22, 33}
+assert(p1.type == Point
+    and p1.x == 22
+    and p1.y == 33)
+
+local email = parse_email("asdf@asdf.com"):unwrap()
+
 assert(p1[7] == nil)
-assert(p1.type == Point)
 local p2 = Point { 44, 55 }
 local l = Line { p1, p2 }
 
@@ -119,6 +125,24 @@ soup.println("got a line: ", line) -- got a line: {
 - exceptions inside `bind` / `map` are caught and converted to `Err`
 - `unwrap()` throws
 - `unwrap_or` never throws
+
+**performance cost**
+
+here's a benchmark for 1 million iterations (on an m1 with 8gb of ram)
+
+```lua
+                           luajit /normal lua
+empty loop                 0.001 s/0.028 s
+Ok() only                  0.001 s/0.126 s
+unwrap() only              0.001 s/0.039 s
+Ok():unwrap()              0.001 s/0.137 s
+Ok():map():unwrap()        0.001 s/0.275 s
+Ok():bind():unwrap()       0.001 s/0.277 s
+Err:unwrap_or()            0.001 s/0.039 s
+plain lua value            0.001 s/0.013 s
+table only                 0.001 s/0.070 s
+```
+this goes as fast as your computer does on luajit so if you use that you shouldn't worry about anything
 
 ## soup.match: reusable match with guards
 **semantics**

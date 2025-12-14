@@ -53,6 +53,7 @@ return function(fields)
 
 			new[0] = self
 			return setmetatable(new, {
+				__len = function (tbl) return #rawget(tbl, 0)["types"] end,
 				__newindex = function() error("struct is immutable") end,
 				__index = function(tbl, key)
 					if key == "type" then return tbl[0] end
