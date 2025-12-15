@@ -1,5 +1,5 @@
 # soup/lua
-> making lua do what it shouldn't
+> wizardry for a less civilised age
 
 ## usage
 clone the `soup/` directory somewhere on your `package.path`
@@ -77,8 +77,12 @@ note that slot the type information is stored in slot 0
 ```lua
 fmt.printf("test \"%s\": %s successful, %s failed",
     stack.description,
-    fmt.color(stack.count - #stack.errors):Green():build(),
-    fmt.color(#stack.errors):Red():Bold():build())
+    fmt.color(stack.count - #stack.errors):Green(),
+    fmt.color(#stack.errors):Red():Bold())
+local a = fmt.color(stack.count - #stack.errors):Green():build() -- the result is a table
+                                                                 -- which has to be converted to a string.
+                                                                 -- print() does this implicitly, but you might to either want to
+                                                                 -- call tostring() or :build() on it
 ```
 
 `fmt.color` is supposed to be used by typing in `color("str"):` and hitting `Tab` or `C-n` in your editor\

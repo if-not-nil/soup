@@ -15,11 +15,16 @@ M.println = function(...)
 	for _, v in ipairs(args) do
 		if type(v) == "table" then
 			io.write(M.unfold(v))
+			goto continue
+			if v[1] == M.StyledStringIdentity then
+				io.write(v:build())
+			end
 		elseif type(v) == "nil" then
 			io.write("nil")
 		else
 			io.write(tostring(v))
 		end
+		::continue::
 	end
 	io.write('\n')
 	io.flush()
@@ -32,6 +37,9 @@ M.printf = function(format, ...)
 	for i, v in ipairs(args) do
 		if type(v) == "table" then
 			args[i] = M.unfold(v)
+			if v[1] == M.StyledStringIdentity then
+				args[i] = v:build()
+			end
 		end
 	end
 	print(string.format(format, table.unpack(args)))
@@ -106,11 +114,13 @@ do
 		return wrap(self.str, self.codes)
 	end
 
+	M.StyledStringIdentity = {} -- to get checked and automatically built
+
 	---@param str any
 	---@return StyledString
 	function M.Colors.color(str)
 		return setmetatable(
-			{ str = tostring(str), codes = {} },
+			{ M.StyledStringIdentity, str = tostring(str), codes = {} },
 			StyledString
 		)
 	end
