@@ -4,9 +4,12 @@
 --
 -- part of the soup files
 -- https://github.com/if-not-nil/soup
+
+---@class fmt
 local M = {}
 
 ---@param ... any
+---@return nil
 M.println = function(...)
 	local args = { ... }
 	for _, v in ipairs(args) do
@@ -34,9 +37,10 @@ M.printf = function(format, ...)
 	print(string.format(format, table.unpack(args)))
 end
 
+---@class fmt.Colors
 M.Colors = {}
-
 do
+	---@type table<string, string>
 	M.Colors.codes = {
 		Black = "30",
 		Red = "31",
@@ -49,18 +53,32 @@ do
 		Brown = "43",
 	}
 
+	---@type table<string, string>
 	M.Colors.styles = {
 		Bold = "1",
 		Italic = "3",
 		Underline = "4"
 	}
 
-	local function wrap(str, codes)
-		if #codes == 0 then return str end
-		return string.format("\27[%sm%s\27[0m", table.concat(codes, ";"), str)
-	end
+	---@alias ColorMethod fun(self: StyledString): StyledString
 
+	---@class StyledString
+	---@field str string
+	---@field codes string[]
+	---@field Black ColorMethod
+	---@field Red ColorMethod
+	---@field Green ColorMethod
+	---@field Yellow ColorMethod
+	---@field Blue ColorMethod
+	---@field Magenta ColorMethod
+	---@field Cyan ColorMethod
+	---@field White ColorMethod
+	---@field Brown ColorMethod
+	---@field Bold ColorMethod
+	---@field Italic ColorMethod
+	---@field Underline ColorMethod
 	local StyledString = {}
+
 	StyledString.__index = function(self, key)
 		local code = M.Colors.codes[key] or M.Colors.styles[key]
 		if code then
@@ -68,28 +86,44 @@ do
 				table.insert(self.codes, code)
 				return self
 			end
-		else
-			return rawget(StyledString, key)
 		end
+		return rawget(StyledString, key)
+	end
+
+	---@param str string
+	---@param codes string[]
+	---@return string
+	local function wrap(str, codes)
+		if #codes == 0 then return str end
+		return string.format("\27[%sm%s\27[0m", table.concat(codes, ";"), str)
 	end
 
 	function StyledString:__tostring()
 		return wrap(self.str, self.codes)
 	end
 
-	---@param str string
+	function StyledString:build()
+		return wrap(self.str, self.codes)
+	end
+
+	---@param str any
+	---@return StyledString
 	function M.Colors.color(str)
-		local obj = setmetatable({ str = str, codes = {} }, StyledString)
-		return obj
+		return setmetatable(
+			{ str = tostring(str), codes = {} },
+			StyledString
+		)
 	end
 end
 
+
+M.color = M.Colors.color
 
 -- for use in unfold
 local function colorize(value, kind)
 	local Colors = M.Colors
 	if kind == "key" then
-		return tostring(Colors.color(value):Red():Bold())
+		return Colors.color(value):Red():Bold():build()
 	elseif kind == "number" then
 		return tostring(Colors.color(value):Cyan())
 	elseif kind == "string" then

@@ -11,7 +11,7 @@ local soup = require("init")
 ## toc
 - [the useful stuff](#the-useful-stuff)
   - [soup.struct: type-safe structs](#soupstruct-type-safe-structs)
-  - [soup.unfold: table pretty printing](#soupunfold-table-pretty-printing)
+  - [soup.fmt: all the printing utilities you might need](#soupfmt-all-the-printing-utilities-you-might-need)
   - [soup.result: a Result structure](#soupresult-a-result-structure)
   - [soup.match: reusable match with guards](#soupmatch-reusable-match-with-guards)
 - [the fun stuff (don't use)](#the-fun-stuff-dont-use)
@@ -72,7 +72,17 @@ assert(l.type == Line)
 ```
 note that slot the type information is stored in slot 0
 
-## soup.unfold: table pretty printing 
+## soup.fmt: all the printing utilities you might need
+**example:**
+```lua
+fmt.printf("test \"%s\": %s successful, %s failed",
+    stack.description,
+    fmt.color(stack.count - #stack.errors):Green():build(),
+    fmt.color(#stack.errors):Red():Bold():build())
+```
+
+`fmt.color` is supposed to be used by typing in `color("str"):` and hitting `Tab` or `C-n` in your editor\
+`fmt.unfold` unfolds a table into a string, and both printf and println do it automatically\
 <img width="159" height="140" src="https://github.com/user-attachments/assets/87e084c8-4acb-4cb3-b598-991bad03871a" />
 
 ## soup.result: a Result structure 
@@ -147,6 +157,11 @@ plain lua value            0.001 s/0.013 s
 table only                 0.001 s/0.070 s
 ```
 this goes as fast as your computer does on luajit so if you use that you shouldn't worry about anything
+
+## soup.river: testing and benchmarking
+this is mostly used to test soup itself
+
+which means its main goal is to be able to test how modules work with eachother
 
 ## soup.match: reusable match with guards
 **semantics**
