@@ -11,14 +11,31 @@ local pcall = pcall
 --
 -- Ok
 --
+---@alias Result<T, E> Ok<T>|Err<E>
+---@generic T, E
+
+---@generic T
+---@class Ok<T>
 local Ok_mt = {}
+
 Ok_mt.__index = Ok_mt
 
-function Ok_mt.unwrap(self)
+---@generic T
+---@return T
+function Ok_mt:unwrap()
 	return self[1]
 end
 
-function Ok_mt.map(self, f)
+---@diagnostic disable-next-line: undefined-doc-param
+---@param msg string
+---@generic T
+---@return T
+function Ok_mt:expect(_) return self[1] end
+
+---@generic T, U, E
+---@param f fun(v: T): U
+---@return Ok<U>|Err<E>
+function Ok_mt:map(f)
 	local ok, v = pcall(f, self[1])
 	if not ok then
 		return Err(v)
@@ -26,7 +43,11 @@ function Ok_mt.map(self, f)
 	return Ok(v)
 end
 
-function Ok_mt.bind(self, f)
+---@generic T, U, E
+---@param f fun(v: T): Ok<U>|Err<E>
+---@return Ok<U>|Err<E>
+---@nodiscard
+function Ok_mt:bind(f)
 	local ok, r = pcall(f, self[1])
 	if not ok then
 		return Err(r)
@@ -34,37 +55,76 @@ function Ok_mt.bind(self, f)
 	return r
 end
 
-function Ok_mt.unwrap_or(self, _)
+---@generic T
+---@param default T
+---@return T
+---@diagnostic disable-next-line: unused-local
+function Ok_mt:unwrap_or(default)
 	return self[1]
 end
 
-function Ok_mt.unwrap_or_else(self, _)
+---@generic T, E
+---@param _ fun(e: E): T
+---@return T
+function Ok_mt:unwrap_or_else(_)
 	return self[1]
 end
 
-function Ok_mt.or_else(self, _)
+---@generic T, E
+---@param _ fun(e: E): any
+---@return Ok<T>
+function Ok_mt:or_else(_)
+	return self
+end
+
+---@generic T, E
+---@param _ fun(e: E): any
+---@return Ok<T>
+function Ok_mt:map_err(_)
 	return self
 end
 
 --
 -- Err
 --
+
+---@generic E
+---@class Err<E>
 local Err_mt = {}
 Err_mt.__index = Err_mt
 
-function Err_mt.unwrap(self)
+---@generic E
+---@deprecated this will crash
+---@return E
+function Err_mt:unwrap()
 	error(self[1], 2)
 end
 
-function Err_mt.map(self, _)
+---@diagnostic disable-next-line: undefined-doc-param
+---@param msg string
+---@generic T
+---@return T
+function Err_mt:expect(msg) error(msg) end
+
+---@generic T, E
+---@param _ fun(v: T): any
+---@return Err<E>
+function Err_mt:map(_)
 	return self
 end
 
-function Err_mt.bind(self, _)
+---@generic T, E
+---@param _ fun(v: T): Ok<T>|Err<E>
+---@return Err<E>
+---@nodiscard
+function Err_mt:bind(_)
 	return self
 end
 
-function Err_mt.map_err(self, f)
+---@generic E, F
+---@param f fun(e: E): F
+---@return Err<F>
+function Err_mt:map_err(f)
 	local ok, e = pcall(f, self[1])
 	if not ok then
 		return Err(e)
@@ -72,11 +132,22 @@ function Err_mt.map_err(self, f)
 	return Err(e)
 end
 
-function Err_mt.unwrap_or(_, d)
-	return d
+---@generic T
+---@param default T
+---@return T
+function Err_mt:unwrap_or(default)
+	return default
 end
 
-function Err_mt.unwrap_or_else(self, f)
+function Err_mt:unwrap_err()
+    return self[1]
+end
+
+---@generic T
+---@diagnostic disable-next-line: undefined-doc-name
+---@param f fun(e: E): T
+---@return T
+function Err_mt:unwrap_or_else(f)
 	local ok, v = pcall(f, self[1])
 	if not ok then
 		error(v, 2)
@@ -84,7 +155,10 @@ function Err_mt.unwrap_or_else(self, f)
 	return v
 end
 
-function Err_mt.or_else(self, f)
+---@generic T, E
+---@param f fun(e: E): Ok<T>|Err<E>
+---@return Ok<T>|Err<E>
+function Err_mt:or_else(f)
 	local ok, r = pcall(f, self[1])
 	if not ok then
 		return Err(r)
@@ -95,12 +169,30 @@ end
 --
 -- constructors
 --
+---@generic T
+---@param v T
+---@return Ok<T>
 function Ok(v)
 	return setmetatable({ v }, Ok_mt)
 end
 
+---@generic E
+---@param e E
+---@return Err<E>
 function Err(e)
 	return setmetatable({ e }, Err_mt)
+end
+
+---@generic E
+---@return E
+function Err_mt:err()
+    return self[1]
+end
+
+---@generic T, E
+---@deprecated trying to get an error value from ok will crash
+function Ok_mt:err()
+    error("trying to get an error value from ok")
 end
 
 return {

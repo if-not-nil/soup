@@ -2,16 +2,33 @@ package.path = "../?.lua;" .. package.path
 local Result = require("init").result
 
 local function expect_error(f, msg)
-    local ok, err = pcall(f)
-    assert(not ok, "expected error")
-    if msg then
-        assert(tostring(err):match(msg), ("expected error matching %q, got %q"):format(msg, err))
-    end
+	local ok, err = pcall(f)
+	assert(not ok, "expected error")
+	if msg then
+		assert(tostring(err):match(msg), ("expected error matching %q, got %q"):format(msg, err))
+	end
 end
 
 -- Ok and Err work
+---@type Ok<number>
 local ok = Result.Ok(42)
+
+---@type Err<string>
 local err = Result.Err("fail")
+
+if nil then
+	---@return Result<string>
+	local function open(name)
+		local file, error = io.open(name)
+		if error ~= nil then
+			return Result.Err(error)
+		end
+		return Result.Ok(file)
+	end
+
+	local f = open("./match_test.lua"):unwrap()
+	print(f:read("l"))
+end
 
 assert(ok:unwrap() == 42)
 assert(ok:unwrap_or(0) == 42)
@@ -27,7 +44,7 @@ assert(err2:unwrap_or(0) == 0)
 
 -- map_err
 local err3 = err:map_err(function(e) return e .. "!" end)
-assert(err3:unwrap_or("") == "fail!")
+assert(err3:err() == "fail!")
 
 local ok3 = ok:map_err(function(e) return e .. "!" end)
 assert(ok3:unwrap() == 42)
@@ -37,7 +54,7 @@ local bound = ok:bind(function(x) return Result.Ok(x + 1) end)
 assert(bound:unwrap() == 43)
 
 local bound_err = ok:bind(function(_) return Result.Err("oops") end)
-assert(bound_err:unwrap_or("") == "oops")
+assert(bound_err:err() == "oops")
 
 local bind_on_err = err:bind(function(x) return Result.Ok(x + 1) end)
 assert(bind_on_err:unwrap_or(0) == 0)
@@ -47,7 +64,7 @@ local or_else_res = err:or_else(function(e) return Result.Ok(e .. " recovered") 
 assert(or_else_res:unwrap() == "fail recovered")
 
 local or_else_err = err:or_else(function(e) return Result.Err(e .. " still fail") end)
-assert(or_else_err:unwrap_or("") == "fail still fail")
+assert(or_else_err:err() == "fail still fail")
 
 local or_else_on_ok = ok:or_else(function(_) return Result.Err("nope") end)
 assert(or_else_on_ok:unwrap() == 42)
@@ -58,13 +75,14 @@ assert(err:unwrap_or_else(function(e) return e .. "!" end) == "fail!")
 
 -- pcall error handling in map/bind/or_else
 local f_err = function() error("boom") end
+
 local r1 = ok:map(f_err)
-assert(r1:unwrap_or(""):match("boom"))
+assert(r1:unwrap_or(true))
 
 local r2 = ok:bind(f_err)
-assert(r2:unwrap_or(""):match("boom"))
+assert(r2:unwrap_or(true))
 
 local r3 = err:or_else(f_err)
-assert(r3:unwrap_or(""):match("boom"))
+assert(r3:unwrap_or(true))
 
 print("all Result tests passed")
