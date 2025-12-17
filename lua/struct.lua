@@ -26,8 +26,11 @@
 --
 -- part of the soup files
 -- https://github.com/if-not-nil/soup
-package.path = "../?.lua;" .. package.path
-local println = require("fmt").println
+---@diagnostic disable: undefined-field, cast-local-type
+
+---@generic T
+---@param fields table
+---@return T
 return function(fields)
 	local types, index = {}, {}
 	for i, field in ipairs(fields) do

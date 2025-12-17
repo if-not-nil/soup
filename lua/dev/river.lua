@@ -5,14 +5,14 @@
 -- part of the soup files
 -- https://github.com/if-not-nil/soup
 local M = {}
+package.path = "../?.lua;" .. package.path
 local fmt = require("fmt")
-local println = fmt.println
 local color = fmt.Colors.color
 local printf = fmt.printf
 
--- ======================================================
--- helpers
--- ======================================================
+--
+-- helper parking lot
+--
 
 ---@param file string
 ---@param n integer
@@ -47,59 +47,93 @@ local function print_error_stack(stack)
 	end
 end
 
--- ======================================================
--- the tester in question
--- ======================================================
+--
+-- context and thread safety
+--
 
 ---@class TestContext
 ---@field description string
 ---@field errors table[]
 ---@field count integer
 
+---@type table<thread, TestContext[]>
+local ctx_for_thread = {}
+
 ---@type TestContext[]
 M.ErrorStack = {}
 
----run a test which you put expects inside of
----@param description string
----@param fn fun(expect: fun(condition:boolean, message?:string))
-function M:test(description, fn)
-	local ctx = { description = description, count = 0, errors = {} }
+--
+-- expect function
+--
 
-	-- local expect closure that captures this context
-	local function expect(condition, message)
-		ctx.count = ctx.count + 1
-		if condition then return end
-
-		local info = debug.getinfo(2, "Sl")
-		local line_number = info.currentline
-		local in_file = info.short_src
-		local line = get_line(in_file, line_number)
-
-		table.insert(ctx.errors, {
-			message = message or "expectation failed",
-			in_file = in_file,
-			line_number = line_number,
-			line = line,
-		})
+---@param condition boolean
+---@param message? string
+function M.expect(condition, message)
+	local co = coroutine.running() or "main"
+	local stack = ctx_for_thread[co]
+	if not stack or #stack == 0 then
+		error("expect called outside of test context", 2)
 	end
 
-	local ok, err = pcall(fn, expect)
+	local ctx = stack[#stack] -- get current test context
+	ctx.count = ctx.count + 1
+	if condition then return end
+
+	local info = debug.getinfo(2, "Sl")
+	local line_number = info.currentline
+	local in_file = info.short_src
+	local line = get_line(in_file, line_number)
+
+	table.insert(ctx.errors, {
+		message = message or "expectation failed",
+		in_file = in_file,
+		line_number = line_number,
+		line = line,
+	})
+end
+
+---@param fn function()
+---@param message? string
+function M.expect_err(fn, message)
+	local ok, _ = pcall(fn)
+	M.expect(not ok, message or "expected function to throw an error")
+end
+
+--
+-- the runner in question
+--
+
+---@param description string
+---@param fn fun()
+function M:test(description, fn)
+	local ctx = { description = description, count = 0, errors = {} }
+	local co = coroutine.running() or "main"
+
+	ctx_for_thread[co] = ctx_for_thread[co] or {}
+	table.insert(ctx_for_thread[co], ctx) -- push is here
+
+	local ok, err = pcall(fn)
 	if not ok then
 		table.insert(ctx.errors, {
 			message = "test threw: " .. tostring(err)
 		})
 	end
 
-	table.insert(M.ErrorStack, ctx)
+	table.remove(ctx_for_thread[co]) -- pop is here
 
+	table.insert(M.ErrorStack, ctx)
 	if #ctx.errors > 0 then
 		print_error_stack(ctx)
 	end
 end
 
-do
-	M:test("asdfsadf", function(expect)
+if not nil then
+	local expect = M.expect
+	M:test("asdfadsf", function()
 		expect(2 + 2 == 4)
+		M.expect_err(function()
+			return "asdf"
+		end, "shouldve errored but didtn")
 		expect(2 + 2 ~= 5)
 		expect(2 + 2 == 5, "2+2 should be 5")
 		expect(2 == 3, "2 should be 3")

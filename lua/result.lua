@@ -195,6 +195,16 @@ function Ok_mt:err()
     error("trying to get an error value from ok")
 end
 
+---@return boolean
+function Ok_mt:is_err()
+    return false
+end
+
+---@return boolean
+function Err_mt:is_err()
+    return true
+end
+
 return {
 	Ok = Ok,
 	Err = Err,
