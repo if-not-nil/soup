@@ -1,4 +1,6 @@
 -- struct.lua --
+-- part of the soup files
+-- https://github.com/if-not-nil/soup
 --
 -- typesafe structs
 --
@@ -37,7 +39,6 @@
 --     Vec2 = struct({
 --     	{ "x", "number" },
 --     	{ "y", "number" },
---     	meta = {
 --     		__add = function(a, b)
 --     			return Vec2(a.x + b.x, a.y + b.y)
 --     		end,
@@ -69,12 +70,8 @@
 --     		unpack = function(self)
 --     			return self.x, self.y
 --     		end,
---     	},
 --     })
 
---
--- part of the soup files
--- https://github.com/if-not-nil/soup
 ---@diagnostic disable: undefined-field, cast-local-type
 
 ---@class StructField
@@ -90,17 +87,24 @@
 ---@return T | fun(...): T
 return function(fields)
 	local types, index = {}, {}
-	for i, field in ipairs(fields) do
+	local methods = {}
+	local temp_mt = {}
+
+	for i, field in pairs(fields) do
 		if type(field) == "table" then
 			types[i] = field[2]
 			index[field[1]] = i
+		elseif type(field) == "function" and type(i) == "string" then
+			if i:sub(1, 2) == "__" then
+				temp_mt[i] = field -- metamethods
+			else
+				methods[i] = field -- normal methods
+			end
 		else
 			types[i] = field
 			index[field] = i
 		end
 	end
-
-	local methods = {}
 
 	-- shared for all structs
 	local struct_mt = {
@@ -145,16 +149,9 @@ return function(fields)
 		__len = function()
 			return #types
 		end,
+		table.unpack(temp_mt),
 	}
-	if fields.meta then
-		for k, v in pairs(fields.meta) do
-			if type(k) == "string" and k:sub(1, 2) == "__" then
-				struct_mt[k] = v -- metamethods
-			else
-				methods[k] = v -- normal methods
-			end
-		end
-	end
+
 	local struct_def = { types = types, index = index, methods = methods }
 
 	-- dynamic methods!
