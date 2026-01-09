@@ -89,7 +89,15 @@ return function(fields)
 			return #types
 		end,
 	}
-
+	if fields.meta then
+		for k, v in pairs(fields.meta) do
+			if type(k) == "string" and k:sub(1, 2) == "__" then
+				struct_mt[k] = v -- metamethods
+			else
+				methods[k] = v -- normal methods
+			end
+		end
+	end
 	local struct_def = { types = types, index = index, methods = methods }
 
 	-- dynamic methods!
@@ -101,7 +109,8 @@ return function(fields)
 
 	return setmetatable(struct_def, {
 		__call = function(self, ...)
-			local new = type(...) == "table" and ... or { ... }
+			local args = { ... }
+			local new = (type(args[1]) == "table" and #args == 1) and args[1] or args
 			assert(#new == #self.types, ("expected %d fields, got %d"):format(#self.types, #new))
 
 			for i, v in ipairs(new) do
