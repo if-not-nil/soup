@@ -24,13 +24,70 @@
 --
 --     assert(l.type == Line)
 --
+--  advanced usage:
+--     ---@class vec2
+--     ---@field x number
+--     ---@field y number
+--     ---@field mag fun(self: vec2): number
+--     ---@field normalize fun(self: vec2): vec2
+--     ---@field dot fun(self: vec2, other: vec2): number
+--     ---@field unpack fun(self: vec2): number, number
+--
+--     ---@type fun(x?: number, y?: number): vec2
+--     Vec2 = struct({
+--     	{ "x", "number" },
+--     	{ "y", "number" },
+--     	meta = {
+--     		__add = function(a, b)
+--     			return Vec2(a.x + b.x, a.y + b.y)
+--     		end,
+--
+--     		__sub = function(a, b)
+--     			return Vec2(a.x - b.x, a.y - b.y)
+--     		end,
+--
+--     		__mul = function(a, b)
+--     			if type(b) == "number" then
+--     				return Vec2(a.x * b, a.y * b)
+--     			end
+--     			return Vec2(a.x * b.x, a.y * b.y)
+--     		end,
+--
+--     		mag = function(self)
+--     			return math.sqrt(self.x ^ 2 + self.y ^ 2)
+--     		end,
+--
+--     		normalize = function(self)
+--     			local m = self:mag()
+--     			return m > 0 and self * (1 / m) or Vec2(0, 0)
+--     		end,
+--
+--     		dot = function(self, other)
+--     			return self.x * other.x + self.y * other.y
+--     		end,
+--
+--     		unpack = function(self)
+--     			return self.x, self.y
+--     		end,
+--     	},
+--     })
+
+--
 -- part of the soup files
 -- https://github.com/if-not-nil/soup
 ---@diagnostic disable: undefined-field, cast-local-type
 
+---@class StructField
+---@field [1] string field name
+---@field [2] string|table field type (as in type() or another struct)
+
+---@class StructInput
+---@field [number] StructField|string
+---@field meta? table<string, function|any>
+
 ---@generic T
----@param fields table
----@return T
+---@param fields StructInput
+---@return T | fun(...): T
 return function(fields)
 	local types, index = {}, {}
 	for i, field in ipairs(fields) do
@@ -107,7 +164,11 @@ return function(fields)
 		self.methods[menthod_name] = fn
 	end
 
-	return setmetatable(struct_def, {
+	---@type any
+	local f = setmetatable(struct_def, {
+		---@param self table
+		---@param ... any
+		---@return T
 		__call = function(self, ...)
 			local args = { ... }
 			local new = (type(args[1]) == "table" and #args == 1) and args[1] or args
@@ -126,4 +187,5 @@ return function(fields)
 			return setmetatable(new, struct_mt)
 		end,
 	})
+	return f
 end
