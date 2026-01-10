@@ -41,8 +41,23 @@ rust's traits and list comprehension
 
 Point = struct {
 	{ "x", "number" },
-	{ "y", "number" }
+	{ "y", "number" },
+    -- some niceties
+	impl = {
+		[Traits.zero] = {
+			zero = function()
+				return Vec2(0, 0)
+			end,
+		},
+    },
+    __add = function(a, b)
+		return Vec2(a.x + b.x, a.y + b.y)
+	end,
+	dot = function(self, other)
+		return self.x * other.x + self.y * other.y
+	end,
 }
+assert(Point:does_implement(Traits.zero))
 
 Line = struct {
 	{ "start", Point },
@@ -166,6 +181,49 @@ this goes as fast as your computer does on luajit so if you use that you shouldn
 this is mostly used to test soup itself
 
 which means its main goal is to be able to test how modules work with eachother
+
+```lua
+-- if you   <close> it, it'll print the results at the end
+local river <close> = require("river")
+local expect = river.expect
+local expect_err = river.expect_err
+
+river:test("nested structs", function()
+	local Line = struct({
+		{ "start", Point },
+		{ "end", Point },
+	})
+
+	local p1, p2 = Point({ 22, 33 }), Point({ 44, 55 })
+	local l = Line({ p1, p2 })
+
+	expect(l.start == p1)
+	expect(l["end"] == p2)
+	expect(l.type == Line)
+end)
+
+river:test("arity checking", function()
+	expect_err(function()
+		Point({ 1, 2, 3 })
+	end, "expected arity error")
+end)
+```
+output:
+```fish
+    tests ran! 30 successful, 0 failed
+```
+or on fail:
+```fish
+    test "zero-field struct": 0 successful, 4 failed
+    ./struct_test.lua:121:
+    ! expect(2 + 2 == 5)
+    ./struct_test.lua:122:
+    ! expect(2 + 2 == 5)
+    ./struct_test.lua:123:
+    ! expect(2 + 2 == 5)
+    ./struct_test.lua:124:
+    ! expect(2 + 2 == 5)
+```
 
 ## soup.match: reusable match with guards
 **semantics**

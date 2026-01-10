@@ -10,6 +10,23 @@ local fmt = require("fmt")
 local color = fmt.Colors.color
 local printf = fmt.printf
 
+---@type integer
+M.TotalExpectations = 0
+---@type integer
+M.SuccessfulExpectations = 0
+setmetatable(M, {
+	__close = function(self)
+		printf(
+			"tests ran! %s successful, %s failed",
+			color(self.SuccessfulExpectations):Green(),
+			color(self.TotalExpectations - self.SuccessfulExpectations):Red()
+		)
+	end,
+})
+function M.expect_stats()
+	return M.SuccessfulExpectations, M.TotalExpectations
+end
+
 --
 -- helper parking lot
 --
@@ -19,7 +36,9 @@ local printf = fmt.printf
 ---@return string?
 local function get_line(file, n)
 	local f <close> = io.open(file, "r")
-	if not f then return nil end
+	if not f then
+		return nil
+	end
 	local i = 1
 	for line in f:lines() do
 		if i == n then
@@ -39,11 +58,7 @@ local function print_error_stack(stack)
 		color(#stack.errors):Red()
 	)
 	for _, e in ipairs(stack.errors) do
-		printf(
-			"%s:\n! %s",
-			color(e.in_file .. ":" .. e.line_number):Cyan(),
-			e.line or e.message
-		)
+		printf("%s:\n! %s", color(e.in_file .. ":" .. e.line_number):Cyan(), e.line or e.message)
 	end
 end
 
@@ -77,7 +92,12 @@ function M.expect(condition, message)
 
 	local ctx = stack[#stack] -- get current test context
 	ctx.count = ctx.count + 1
-	if condition then return end
+	M.TotalExpectations = M.TotalExpectations + 1
+
+	if condition then
+		M.SuccessfulExpectations = M.SuccessfulExpectations + 1
+		return
+	end
 
 	local info = debug.getinfo(2, "Sl")
 	local line_number = info.currentline
@@ -115,7 +135,7 @@ function M:test(description, fn)
 	local ok, err = pcall(fn)
 	if not ok then
 		table.insert(ctx.errors, {
-			message = "test threw: " .. tostring(err)
+			message = "test threw: " .. tostring(err),
 		})
 	end
 
@@ -127,17 +147,17 @@ function M:test(description, fn)
 	end
 end
 
-if not nil then
-	local expect = M.expect
-	M:test("asdfadsf", function()
-		expect(2 + 2 == 4)
-		M.expect_err(function()
-			return "asdf"
-		end, "shouldve errored but didtn")
-		expect(2 + 2 ~= 5)
-		expect(2 + 2 == 5, "2+2 should be 5")
-		expect(2 == 3, "2 should be 3")
-	end)
-end
+-- if not nil then
+-- 	local expect = M.expect
+-- 	M:test("asdfadsf", function()
+-- 		expect(2 + 2 == 4)
+-- 		M.expect_err(function()
+-- 			return "asdf"
+-- 		end, "shouldve errored but didtn")
+-- 		expect(2 + 2 ~= 5)
+-- 		expect(2 + 2 == 5, "2+2 should be 5")
+-- 		expect(2 == 3, "2 should be 3")
+-- 	end)
+-- end
 
 return M

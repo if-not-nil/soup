@@ -1,157 +1,133 @@
 package.path = "../?.lua;" .. package.path
-local struct = require("struct")
-local println = require("fmt").println
 
-local function expect_error(f, msg)
-	local ok, err = pcall(f)
-	assert(not ok, "expected error, got success")
-	if msg then
-		assert(tostring(err):match(msg), ("expected error matching %q, got %q"):format(msg, err))
-	end
-end
+local river <close> = require("river")
+local expect = river.expect
+local expect_err = river.expect_err
+
+local struct = require("struct")
 
 -- struct with named fields
-local Point <const> = struct({
+local Point = struct({
 	{ "x", "number" },
 	{ "y", "number" },
 })
-
--- local Format = {
--- 	methods = {
--- 		format = {
--- 			nparams = 2, -- self, writer
--- 			isvararg = false
--- 		}
--- 	}
--- }
--- local Trait <const> = function(spec)
--- 	local t = spec.fields and {spec.fields} or {}
---
---
--- 	return {
--- 		fields, methods
--- 	}
--- end
---
--- local Format = {
--- 	{"function", nparams = 1, isvararg = false},
--- 	{"field", x = "string"}
--- }
---
---
--- local ToString = {
--- 	fields = {},
--- 	methods = {
--- 		to_string = {
--- 			isvararg = false,
--- 			nparams = 1, -- self
--- 		}
--- 	},
--- 	auto_impl = {
--- 		[Format] = function(self, writer)
--- 		end
--- 	}
--- }
---
--- local HasPosition = {
--- 	fields = { { "x", "number" }, { "y", "number" } }
--- }
---
--- local Movable = {
--- 	fields = { "x", "y" },
--- 	methods = {
--- 		move = "function"
--- 	}
--- }
 
 Point:method("magnitude", function(self)
 	return math.sqrt(self.x ^ 2 + self.y ^ 2)
 end)
 
-local p = Point(3, 4)
-assert(p:magnitude() == 5)
+river:test("construction and methods", function()
+	local p = Point(3, 4)
+	expect(p:magnitude() == 5, "magnitude should be 5 for (3,4)")
+end)
 
-local p1 = Point({ 22, 33 })
+river:test("table constructor and field access", function()
+	local p1 = Point({ 22, 33 })
 
-assert(p1[1] == 22)
-assert(p1[2] == 33)
-assert(p1.x == 22)
-p1.x = 2
-assert(p1.x == 2)
-p1.x = 22
-assert(p1.x == 22)
-assert(p1.y == 33)
-assert(p1[7] == nil)
-assert(p1.type == Point)
+	expect(p1[1] == 22)
+	expect(p1[2] == 33)
+	expect(p1.x == 22)
 
--- wrong arity
-expect_error(function()
-	Point({ 1 })
-end, "expected 2 fields")
+	p1.x = 2
+	expect(p1.x == 2)
 
-expect_error(function()
-	Point({ 1, 2, 3 })
-end, "expected 2 fields")
+	p1.x = 22
+	expect(p1.x == 22)
+	expect(p1.y == 33)
 
--- wrong primitive type
-expect_error(function()
-	Point({ "nope", 2 })
-end, "expected number")
+	expect(p1[7] == nil)
+	expect(p1.type == Point)
+end)
 
--- nested structs
-local Line = struct({
-	{ "start", Point },
-	{ "end", Point },
-})
+river:test("arity checking", function()
+	expect_err(function()
+		Point({ 1 })
+	end, "expected arity error")
 
-local p2 = Point({ 44, 55 })
-local l = Line({ p1, p2 })
+	expect_err(function()
+		Point({ 1, 2, 3 })
+	end, "expected arity error")
+end)
 
-assert(l.start == p1)
-assert(l["end"] == p2)
-assert(l.type == Line)
+river:test("primitive type checking", function()
+	expect_err(function()
+		Point({ "none", 2 })
+	end, "expected type error")
+end)
 
--- nested type mismatch
-expect_error(function()
-	Line({ p1, { 1, 2 } })
-end, "type mismatch")
+river:test("nested structs", function()
+	local Line = struct({
+		{ "start", Point },
+		{ "end", Point },
+	})
 
--- single-field struct
+	local p1, p2 = Point({ 22, 33 }), Point({ 44, 55 })
+	local l = Line({ p1, p2 })
 
-local Email = struct({ "string" })
+	expect(l.start == p1)
+	expect(l["end"] == p2)
+	expect(l.type == Line)
+end)
 
-local e1 = Email("test@example.com")
-local e2 = Email({ "test@example.com" })
+river:test("nested struct type mismatch", function()
+	local Line = struct({
+		{ "start", Point },
+		{ "end", Point },
+	})
 
-assert(e1[1] == "test@example.com")
-assert(e1.type == Email)
-assert(e1 ~= e2)
+	local p1 = Point({ 22, 33 })
 
--- tostring behavior
-assert(tostring(e1) == "test@example.com")
-assert(not (tostring(e1) == "other@example.com"))
+	expect_err(function()
+		Line({ p1, { 1, 2 } })
+	end, "expected nested type mismatch")
+end)
 
-local s = tostring(p1)
-assert(s:match("x=22"))
-assert(s:match("y=33"))
+river:test("single-field struct behavior", function()
+	local Email = struct({ "string" })
 
--- index lookup only exposes declared fields
-assert(p1.z == nil)
-assert(p1.foo == nil)
+	local e1 = Email("test@example.com")
+	local e2 = Email({ "test@example.com" })
 
--- ensure index table doesn't leak
-assert(p1.index == nil)
-assert(p1.types == nil)
+	expect(e1[1] == "test@example.com")
+	expect(e1.type == Email)
+	expect(e1 ~= e2, "distinct instances should not be equal")
+end)
 
--- equality for multi-field structs is strict identity
-local p1_clone = Point({ 22, 33 })
-assert(p1 ~= p1_clone)
-assert(p1 == p1)
+river:test("tostring behavior", function()
+	local Email = struct({ "string" })
+	local e = Email("test@example.com")
 
--- zero-field struct
-local Unit = struct({})
-local u = Unit({})
-assert(u.type == Unit)
-assert(#u == 0)
+	expect(tostring(e) == "test@example.com")
 
-print("all struct tests passed")
+	local p = Point({ 22, 33 })
+	local s = tostring(p)
+
+	expect(s:match("x=22") ~= nil)
+	expect(s:match("y=33") ~= nil)
+end)
+
+river:test("index safety", function()
+	local p = Point({ 22, 33 })
+
+	expect(p.z == nil)
+	expect(p.foo == nil)
+
+	expect(p.index == nil)
+	expect(p.types == nil)
+end)
+
+river:test("equality semantics", function()
+	local p1 = Point({ 22, 33 })
+	local p2 = Point({ 22, 33 })
+
+	expect(p1 ~= p2, "distinct structs should not be equal")
+	expect(p1 == p1, "struct should equal itself")
+end)
+
+river:test("zero-field struct", function()
+	local Unit = struct({})
+	local u = Unit({})
+
+	expect(u.type == Unit)
+	expect(#u == 0)
+end)
