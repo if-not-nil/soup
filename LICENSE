@@ -1,440 +1,77 @@
-HIPPOCRATIC LICENSE
+The Artistic License 2.0
 
-Version 3.0, October 2021
+Copyright (c) 2000-2006, The Perl Foundation.
 
-https://firstdonoharm.dev/version/3/0/full.txt
+Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.
 
-TERMS AND CONDITIONS
+Preamble
 
-TERMS AND CONDITIONS FOR USE, COPY, MODIFICATION, PREPARATION OF DERIVATIVE
-WORK, REPRODUCTION, AND DISTRIBUTION:
+This license establishes the terms under which a given free software Package may be copied, modified, distributed, and/or redistributed. The intent is that the Copyright Holder maintains some artistic control over the development of that Package while still keeping the Package available as open source and free software.
 
-1. DEFINITIONS:
+You are always permitted to make arrangements wholly outside of this license directly with the Copyright Holder of a given Package. If the terms of this license do not permit the full use that you propose to make of the Package, you should contact the Copyright Holder and seek a different licensing arrangement.
 
-This section defines certain terms used throughout this license agreement.
+Definitions
 
-1.1. “License” means the terms and conditions, as stated herein, for use, copy,
-modification, preparation of derivative work, reproduction, and distribution of
-Software (as defined below).
+    "Copyright Holder" means the individual(s) or organization(s) named in the copyright notice for the entire Package.
 
-1.2. “Licensor” means the copyright and/or patent owner or entity authorized by
-the copyright and/or patent owner that is granting the License.
+    "Contributor" means any party that has contributed code or other material to the Package, in accordance with the Copyright Holder's procedures.
 
-1.3. “Licensee” means the individual or entity exercising permissions granted by
-this License, including the use, copy, modification, preparation of derivative
-work, reproduction, and distribution of Software (as defined below).
+    "You" and "your" means any person who would like to copy, distribute, or modify the Package.
 
-1.4. “Software” means any copyrighted work, including but not limited to
-software code, authored by Licensor and made available under this License.
+    "Package" means the collection of files distributed by the Copyright Holder, and derivatives of that collection and/or of those files. A given Package may consist of either the Standard Version, or a Modified Version.
 
-1.5. “Supply Chain” means the sequence of processes involved in the production
-and/or distribution of a commodity, good, or service offered by the Licensee.
+    "Distribute" means providing a copy of the Package or making it accessible to anyone else, or in the case of a company or organization, to others outside of your company or organization.
 
-1.6. “Supply Chain Impacted Party” or “Supply Chain Impacted Parties” means any
-person(s) directly impacted by any of Licensee’s Supply Chain, including the
-practices of all persons or entities within the Supply Chain prior to a good or
-service reaching the Licensee.
+    "Distributor Fee" means any fee that you charge for Distributing this Package or providing support for this Package to another party. It does not mean licensing fees.
 
-1.7. “Duty of Care” is defined by its use in tort law, delict law, and/or
-similar bodies of law closely related to tort and/or delict law, including
-without limitation, a requirement to act with the watchfulness, attention,
-caution, and prudence that a reasonable person in the same or similar
-circumstances would use towards any Supply Chain Impacted Party.
+    "Standard Version" refers to the Package if it has not been modified, or has been modified only in ways explicitly requested by the Copyright Holder.
 
-1.8. “Worker” is defined to include any and all permanent, temporary, and agency
-workers, as well as piece-rate, salaried, hourly paid, legal young (minors),
-part-time, night, and migrant workers.
+    "Modified Version" means the Package, if it has been changed, and such changes were not explicitly requested by the Copyright Holder.
 
-2. INTELLECTUAL PROPERTY GRANTS:
+    "Original License" means this Artistic License as Distributed with the Standard Version of the Package, in its current version or as it may be modified by The Perl Foundation in the future.
 
-This section identifies intellectual property rights granted to a Licensee.
+    "Source" form means the source code, documentation source, and configuration files for the Package.
 
-2.1. Grant of Copyright License: Subject to the terms and conditions of this
-License, Licensor hereby grants to Licensee a worldwide, non-exclusive,
-no-charge, royalty-free copyright license to use, copy, modify, prepare
-derivative work, reproduce, or distribute the Software, Licensor authored
-modified software, or other work derived from the Software.
+    "Compiled" form means the compiled bytecode, object code, binary, or any other form resulting from mechanical transformation or translation of the Source form.
 
-2.2. Grant of Patent License: Subject to the terms and conditions of this
-License, Licensor hereby grants Licensee a worldwide, non-exclusive, no-charge,
-royalty-free patent license to make, have made, use, offer to sell, sell,
-import, and otherwise transfer Software.
+Permission for Use and Modification Without Distribution
 
-3. ETHICAL STANDARDS:
+    (1) You are permitted to use the Standard Version and create and use Modified Versions for any purpose without restriction, provided that you do not Distribute the Modified Version.
 
-This section lists conditions the Licensee must comply with in order to have
-rights under this License.
+Permissions for Redistribution of the Standard Version
 
-The rights granted to the Licensee by this License are expressly made subject to
-the Licensee’s ongoing compliance with the following conditions:
+    (2) You may Distribute verbatim copies of the Source form of the Standard Version of this Package in any medium without restriction, either gratis or for a Distributor Fee, provided that you duplicate all of the original copyright notices and associated disclaimers. At your discretion, such verbatim copies may or may not include a Compiled form of the Package.
+    (3) You may apply any bug fixes, portability changes, and other modifications made available from the Copyright Holder. The resulting Package will still be considered the Standard Version, and as such will be subject to the Original License.
 
- * 3.1. The Licensee SHALL NOT, whether directly or indirectly, through agents
-   or assigns:
-   
-   * 3.1.1. Infringe upon any person’s right to life or security of person,
-     engage in extrajudicial killings, or commit murder, without lawful cause
-     (See Article 3, United Nations Universal Declaration of Human Rights;
-     Article 6, International Covenant on Civil and Political Rights)
-   
-   * 3.1.2. Hold any person in slavery, servitude, or forced labor (See Article
-     4, United Nations Universal Declaration of Human Rights; Article 8,
-     International Covenant on Civil and Political Rights);
-   
-   * 3.1.3. Contribute to the institution of slavery, slave trading, forced
-     labor, or unlawful child labor (See Article 4, United Nations Universal
-     Declaration of Human Rights; Article 8, International Covenant on Civil and
-     Political Rights);
-   
-   * 3.1.4. Torture or subject any person to cruel, inhumane, or degrading
-     treatment or punishment (See Article 5, United Nations Universal
-     Declaration of Human Rights; Article 7, International Covenant on Civil and
-     Political Rights);
-   
-   * 3.1.5. Discriminate on the basis of sex, gender, sexual orientation, race,
-     ethnicity, nationality, religion, caste, age, medical disability or
-     impairment, and/or any other like circumstances (See Article 7, United
-     Nations Universal Declaration of Human Rights; Article 2, International
-     Covenant on Economic, Social and Cultural Rights; Article 26, International
-     Covenant on Civil and Political Rights);
-   
-   * 3.1.6. Prevent any person from exercising his/her/their right to seek an
-     effective remedy by a competent court or national tribunal (including
-     domestic judicial systems, international courts, arbitration bodies, and
-     other adjudicating bodies) for actions violating the fundamental rights
-     granted to him/her/them by applicable constitutions, applicable laws, or by
-     this License (See Article 8, United Nations Universal Declaration of Human
-     Rights; Articles 9 and 14, International Covenant on Civil and Political
-     Rights);
-   
-   * 3.1.7. Subject any person to arbitrary arrest, detention, or exile (See
-     Article 9, United Nations Universal Declaration of Human Rights; Article 9,
-     International Covenant on Civil and Political Rights);
-   
-   * 3.1.8. Subject any person to arbitrary interference with a person’s
-     privacy, family, home, or correspondence without the express written
-     consent of the person (See Article 12, United Nations Universal Declaration
-     of Human Rights; Article 17, International Covenant on Civil and Political
-     Rights);
-   
-   * 3.1.9. Arbitrarily deprive any person of his/her/their property (See
-     Article 17, United Nations Universal Declaration of Human Rights);
-   
-   * 3.1.10. Forcibly remove indigenous peoples from their lands or territories
-     or take any action with the aim or effect of dispossessing indigenous
-     peoples from their lands, territories, or resources, including without
-     limitation the intellectual property or traditional knowledge of indigenous
-     peoples, without the free, prior, and informed consent of indigenous
-     peoples concerned (See Articles 8 and 10, United Nations Declaration on the
-     Rights of Indigenous Peoples);
-   
-    * 3.1.11. Fossil Fuel Divestment: Be an individual or entity, or a
-      representative, agent, affiliate, successor, attorney, or assign of an
-      individual or entity, on the FFI Solutions Carbon Underground 200 list
-      [https://www.ffisolutions.com/research-analytics-index-solutions/research-screening/the-carbon-underground-200/?cn-reloaded=1];
-   
-    * 3.1.12. Ecocide: Commit ecocide:
-      
-      * 3.1.12.1. For the purpose of this section, “ecocide” means unlawful or
-        wanton acts committed with knowledge that there is a substantial
-        likelihood of severe and either widespread or long-term damage to the
-        environment being caused by those acts;
-      
-      * 3.1.12.2. For the purpose of further defining ecocide and the terms
-        contained in the previous paragraph:
-        
-        * 3.1.12.2.1. “Wanton” means with reckless disregard for damage which
-          would be clearly excessive in relation to the social and economic
-          benefits anticipated;
-        
-        * 3.1.12.2.2. “Severe” means damage which involves very serious adverse
-          changes, disruption, or harm to any element of the environment,
-          including grave impacts on human life or natural, cultural, or
-          economic resources;
-        
-        * 3.1.12.2.3. “Widespread” means damage which extends beyond a limited
-          geographic area, crosses state boundaries, or is suffered by an entire
-          ecosystem or species or a large number of human beings;
-        
-        * 3.1.12.2.4. “Long-term” means damage which is irreversible or which
-          cannot be redressed through natural recovery within a reasonable
-          period of time; and
-        
-        * 3.1.12.2.5. “Environment” means the earth, its biosphere, cryosphere,
-          lithosphere, hydrosphere, and atmosphere, as well as outer space
-          
-          (See Section II, Independent Expert Panel for the Legal Definition of
-          Ecocide, Stop Ecocide Foundation and the Promise Institute for Human
-          Rights at UCLA School of Law, June 2021);
-   
-    * 3.1.13. Extractive Industries: Be an individual or entity, or a
-      representative, agent, affiliate, successor, attorney, or assign of an
-      individual or entity, that engages in fossil fuel or mineral exploration,
-      extraction, development, or sale;
-   
-    * 3.1.14. Boycott / Divestment / Sanctions: Be an individual or entity, or a
-      representative, agent, affiliate, successor, attorney, or assign of an
-      individual or entity, identified by the Boycott, Divestment, Sanctions
-      (“BDS”) movement on its website (https://bdsmovement.net/
-      [https://bdsmovement.net/] and
-      https://bdsmovement.net/get-involved/what-to-boycott
-      [https://bdsmovement.net/get-involved/what-to-boycott]) as a target for
-      boycott;
-   
-    * 3.1.15. Taliban: Be an individual or entity that:
-      
-      * 3.1.15.1. engages in any commercial transactions with the Taliban; or
-      
-      * 3.1.15.2. is a representative, agent, affiliate, successor, attorney, or
-        assign of the Taliban;
-   
-    * 3.1.16. Myanmar: Be an individual or entity that:
-      
-      * 3.1.16.1. engages in any commercial transactions with the
-        Myanmar/Burmese military junta; or
-      
-      * 3.1.16.2. is a representative, agent, affiliate, successor, attorney, or
-        assign of the Myanmar/Burmese government;
-   
-    * 3.1.17. Xinjiang Uygur Autonomous Region: Be an individual or entity, or a
-      representative, agent, affiliate, successor, attorney, or assign of any
-      individual or entity, that does business in, purchases goods from, or
-      otherwise benefits from goods produced in the Xinjiang Uygur Autonomous
-      Region of China;
-   
-    * 3.1.18. US Tariff Act: Be an individual or entity:
-      
-      * 3.1.18.1. which U.S. Customs and Border Protection (CBP) has currently
-        issued a Withhold Release Order (WRO) or finding against based on
-        reasonable suspicion of forced labor; or
-      
-      * 3.1.18.2. that is a representative, agent, affiliate, successor,
-        attorney, or assign of an individual or entity that does business with
-        an individual or entity which currently has a WRO or finding from CBP
-        issued against it based on reasonable suspicion of forced labor;
-   
-    * 3.1.19. Mass Surveillance: Be a government agency or multinational
-      corporation, or a representative, agent, affiliate, successor, attorney,
-      or assign of a government or multinational corporation, which participates
-      in mass surveillance programs;
-   
-    * 3.1.20. Military Activities: Be an entity or a representative, agent,
-      affiliate, successor, attorney, or assign of an entity which conducts
-      military activities;
-   
-    * 3.1.21. Law Enforcement: Be an individual or entity, or a representative,
-      agent, affiliate, successor, attorney, or assign of an individual or
-      entity, that provides good or services to, or otherwise enters into any
-      commercial contracts with, any local, state, or federal law enforcement
-      agency;
-   
-    * 3.1.22. Media: Be an individual or entity, or a representative, agent,
-      affiliate, successor, attorney, or assign of an individual or entity, that
-      broadcasts messages promoting killing, torture, or other forms of extreme
-      violence;
-   
-   * 3.1.23. Interfere with Workers’ free exercise of the right to organize and
-     associate (See Article 20, United Nations Universal Declaration of Human
-     Rights; C087 - Freedom of Association and Protection of the Right to
-     Organise Convention, 1948 (No. 87), International Labour Organization;
-     Article 8, International Covenant on Economic, Social and Cultural Rights);
-     and
-   
-   * 3.1.24. Harm the environment in a manner inconsistent with local, state,
-     national, or international law.
+Distribution of Modified Versions of the Package as Source
 
- * 3.2. The Licensee SHALL:
-   
-    * 3.2.1. Social Auditing: Only use social auditing mechanisms that adhere to
-      Worker-Driven Social Responsibility Network’s Statement of Principles
-      (https://wsr-network.org/what-is-wsr/statement-of-principles/
-      [https://wsr-network.org/what-is-wsr/statement-of-principles/]) over
-      traditional social auditing mechanisms, to the extent the Licensee uses
-      any social auditing mechanisms at all;
-   
-    * 3.2.2. Workers on Board of Directors: Ensure that if the Licensee has a
-      Board of Directors, 30% of Licensee’s board seats are held by Workers paid
-      no more than 200% of the compensation of the lowest paid Worker of the
-      Licensee;
-   
-    * 3.2.3. Supply Chain: Provide clear, accessible supply chain data to the
-      public in accordance with the following conditions:
-      
-      * 3.2.3.1. All data will be on Licensee’s website and/or, to the extent
-        Licensee is a representative, agent, affiliate, successor, attorney,
-        subsidiary, or assign, on Licensee’s principal’s or parent’s website or
-        some other online platform accessible to the public via an internet
-        search on a common internet search engine; and
-      
-      * 3.2.3.2. Data published will include, where applicable, manufacturers,
-        top tier suppliers, subcontractors, cooperatives, component parts
-        producers, and farms;
-   
-   * 3.2.4. Provide equal pay for equal work where the performance of such work
-     requires equal skill, effort, and responsibility, and which are performed
-     under similar working conditions, except where such payment is made
-     pursuant to:
-     
-     * 3.2.4.1. A seniority system;
-     
-     * 3.2.4.2. A merit system;
-     
-     * 3.2.4.3. A system which measures earnings by quantity or quality of
-       production; or
-     
-     * 3.2.4.4. A differential based on any other factor other than sex, gender,
-       sexual orientation, race, ethnicity, nationality, religion, caste, age,
-       medical disability or impairment, and/or any other like circumstances
-       (See 29 U.S.C.A. § 206(d)(1); Article 23, United Nations Universal
-       Declaration of Human Rights; Article 7, International Covenant on
-       Economic, Social and Cultural Rights; Article 26, International Covenant
-       on Civil and Political Rights); and
-   
-   * 3.2.5. Allow for reasonable limitation of working hours and periodic
-     holidays with pay (See Article 24, United Nations Universal Declaration of
-     Human Rights; Article 7, International Covenant on Economic, Social and
-     Cultural Rights).
+    (4) You may Distribute your Modified Version as Source (either gratis or for a Distributor Fee, and with or without a Compiled form of the Modified Version) provided that you clearly document how it differs from the Standard Version, including, but not limited to, documenting any non-standard features, executables, or modules, and provided that you do at least ONE of the following:
+        (a) make the Modified Version available to the Copyright Holder of the Standard Version, under the Original License, so that the Copyright Holder may include your modifications in the Standard Version.
+        (b) ensure that installation of your Modified Version does not prevent the user installing or running the Standard Version. In addition, the Modified Version must bear a name that is different from the name of the Standard Version.
+        (c) allow anyone who receives a copy of the Modified Version to make the Source form of the Modified Version available to others under
+            (i) the Original License or
+            (ii) a license that permits the licensee to freely copy, modify and redistribute the Modified Version using the same licensing terms that apply to the copy that the licensee received, and requires that the Source form of the Modified Version, and of any works derived from it, be made freely available in that license fees are prohibited but Distributor Fees are allowed.
 
-4. SUPPLY CHAIN IMPACTED PARTIES:
+Distribution of Compiled Forms of the Standard Version or Modified Versions without the Source
 
-This section identifies additional individuals or entities that a Licensee could
-harm as a result of violating the Ethical Standards section, the condition that
-the Licensee must voluntarily accept a Duty of Care for those individuals or
-entities, and the right to a private right of action that those individuals or
-entities possess as a result of violations of the Ethical Standards section.
+    (5) You may Distribute Compiled forms of the Standard Version without the Source, provided that you include complete instructions on how to get the Source of the Standard Version. Such instructions must be valid at the time of your distribution. If these instructions, at any time while you are carrying out such distribution, become invalid, you must provide new instructions on demand or cease further distribution. If you provide valid instructions or cease distribution within thirty days after you become aware that the instructions are invalid, then you do not forfeit any of your rights under this license.
+    (6) You may Distribute a Modified Version in Compiled form without the Source, provided that you comply with Section 4 with respect to the Source of the Modified Version.
 
-4.1. In addition to the above Ethical Standards, Licensee voluntarily accepts a
-Duty of Care for Supply Chain Impacted Parties of this License, including
-individuals and communities impacted by violations of the Ethical Standards. The
-Duty of Care is breached when a provision within the Ethical Standards section
-is violated by a Licensee, one of its successors or assigns, or by an individual
-or entity that exists within the Supply Chain prior to a good or service
-reaching the Licensee.
+Aggregating or Linking the Package
 
-4.2. Breaches of the Duty of Care, as stated within this section, shall create a
-private right of action, allowing any Supply Chain Impacted Party harmed by the
-Licensee to take legal action against the Licensee in accordance with applicable
-negligence laws, whether they be in tort law, delict law, and/or similar bodies
-of law closely related to tort and/or delict law, regardless if Licensee is
-directly responsible for the harms suffered by a Supply Chain Impacted Party.
-Nothing in this section shall be interpreted to include acts committed by
-individuals outside of the scope of his/her/their employment.
+    (7) You may aggregate the Package (either the Standard Version or Modified Version) with other packages and Distribute the resulting aggregation provided that you do not charge a licensing fee for the Package. Distributor Fees are permitted, and licensing fees for other components in the aggregation are permitted. The terms of this license apply to the use and Distribution of the Standard or Modified Versions as included in the aggregation.
+    (8) You are permitted to link Modified and Standard Versions with other works, to embed the Package in a larger work of your own, or to build stand-alone binary or bytecode versions of applications that include the Package, and Distribute the result without restriction, provided the result does not expose a direct interface to the Package.
 
-5. NOTICE: This section explains when a Licensee must notify others of the
-License.
+Items That are Not Considered Part of a Modified Version
 
-5.1. Distribution of Notice: Licensee must ensure that everyone who receives a
-copy of or uses any part of Software from Licensee, with or without changes,
-also receives the License and the copyright notice included with Software (and
-if included by the Licensor, patent, trademark, and attribution notice).
-Licensee must ensure that License is prominently displayed so that any
-individual or entity seeking to download, copy, use, or otherwise receive any
-part of Software from Licensee is notified of this License and its terms and
-conditions. Licensee must cause any modified versions of the Software to carry
-prominent notices stating that Licensee changed the Software.
+    (9) Works (including, but not limited to, modules and scripts) that merely extend or make use of the Package, do not, by themselves, cause the Package to be a Modified Version. In addition, such works are not considered parts of the Package itself, and are not subject to the terms of this license.
 
-5.2. Modified Software: Licensee is free to create modifications of the Software
-and distribute only the modified portion created by Licensee, however, any
-derivative work stemming from the Software or its code must be distributed
-pursuant to this License, including this Notice provision.
+General Provisions
 
-5.3. Recipients as Licensees: Any individual or entity that uses, copies,
-modifies, reproduces, distributes, or prepares derivative work based upon the
-Software, all or part of the Software’s code, or a derivative work developed by
-using the Software, including a portion of its code, is a Licensee as defined
-above and is subject to the terms and conditions of this License.
+    (10) Any use, modification, and distribution of the Standard or Modified Versions is governed by this Artistic License. By using, modifying or distributing the Package, you accept this license. Do not use, modify, or distribute the Package, if you do not accept this license.
+    (11) If your Modified Version has been derived from a Modified Version made by someone other than you, you are nevertheless required to ensure that your Modified Version complies with the requirements of this license.
+    (12) This license does not grant you the right to use any trademark, service mark, tradename, or logo of the Copyright Holder.
+    (13) This license includes the non-exclusive, worldwide, free-of-charge patent license to make, have made, use, offer to sell, sell, import and otherwise transfer the Package with respect to any patent claims licensable by the Copyright Holder that are necessarily infringed by the Package. If you institute patent litigation (including a cross-claim or counterclaim) against any party alleging that the Package constitutes direct or contributory patent infringement, then this Artistic License to you shall terminate on the date that such litigation is filed.
+    (14) Disclaimer of Warranty:
 
-6. REPRESENTATIONS AND WARRANTIES:
-
-6.1. Disclaimer of Warranty: TO THE FULL EXTENT ALLOWED BY LAW, THIS SOFTWARE
-COMES “AS IS,” WITHOUT ANY WARRANTY, EXPRESS OR IMPLIED, AND LICENSOR SHALL NOT
-BE LIABLE TO ANY PERSON OR ENTITY FOR ANY DAMAGES OR OTHER LIABILITY ARISING
-FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THIS LICENSE, UNDER ANY
-LEGAL CLAIM.
-
-6.2. Limitation of Liability: LICENSEE SHALL HOLD LICENSOR HARMLESS AGAINST ANY
-AND ALL CLAIMS, DEBTS, DUES, LIABILITIES, LIENS, CAUSES OF ACTION, DEMANDS,
-OBLIGATIONS, DISPUTES, DAMAGES, LOSSES, EXPENSES, ATTORNEYS’ FEES, COSTS,
-LIABILITIES, AND ALL OTHER CLAIMS OF EVERY KIND AND NATURE WHATSOEVER, WHETHER
-KNOWN OR UNKNOWN, ANTICIPATED OR UNANTICIPATED, FORESEEN OR UNFORESEEN, ACCRUED
-OR UNACCRUED, DISCLOSED OR UNDISCLOSED, ARISING OUT OF OR RELATING TO LICENSEE’S
-USE OF THE SOFTWARE. NOTHING IN THIS SECTION SHOULD BE INTERPRETED TO REQUIRE
-LICENSEE TO INDEMNIFY LICENSOR, NOR REQUIRE LICENSOR TO INDEMNIFY LICENSEE.
-
-7. TERMINATION
-
-7.1. Violations of Ethical Standards or Breaching Duty of Care: If Licensee
-violates the Ethical Standards section or Licensee, or any other person or
-entity within the Supply Chain prior to a good or service reaching the Licensee,
-breaches its Duty of Care to Supply Chain Impacted Parties, Licensee must remedy
-the violation or harm caused by Licensee within 30 days of being notified of the
-violation or harm. If Licensee fails to remedy the violation or harm within 30
-days, all rights in the Software granted to Licensee by License will be null and
-void as between Licensor and Licensee.
-
-7.2. Failure of Notice: If any person or entity notifies Licensee in writing
-that Licensee has not complied with the Notice section of this License, Licensee
-can keep this License by taking all practical steps to comply within 30 days
-after the notice of noncompliance. If Licensee does not do so, Licensee’s
-License (and all rights licensed hereunder) will end immediately.
-
-7.3. Judicial Findings: In the event Licensee is found by a civil, criminal,
-administrative, or other court of competent jurisdiction, or some other
-adjudicating body with legal authority, to have committed actions which are in
-violation of the Ethical Standards or Supply Chain Impacted Party sections of
-this License, all rights granted to Licensee by this License will terminate
-immediately.
-
-7.4. Patent Litigation: If Licensee institutes patent litigation against any
-entity (including a cross-claim or counterclaim in a suit) alleging that the
-Software, all or part of the Software’s code, or a derivative work developed
-using the Software, including a portion of its code, constitutes direct or
-contributory patent infringement, then any patent license, along with all other
-rights, granted to Licensee under this License will terminate as of the date
-such litigation is filed.
-
-7.5. Additional Remedies: Termination of the License by failing to remedy harms
-in no way prevents Licensor or Supply Chain Impacted Party from seeking
-appropriate remedies at law or in equity.
-
-8. MISCELLANEOUS:
-
-8.1. Conditions: Sections 3, 4.1, 5.1, 5.2, 7.1, 7.2, 7.3, and 7.4 are
-conditions of the rights granted to Licensee in the License.
-
-8.2. Equitable Relief: Licensor and any Supply Chain Impacted Party shall be
-entitled to equitable relief, including injunctive relief or specific
-performance of the terms hereof, in addition to any other remedy to which they
-are entitled at law or in equity.
-
-8.3. Copyleft: Modified software, source code, or other derivative work must be
-licensed, in its entirety, under the exact same conditions as this License.
-
-8.4. Severability: If any term or provision of this License is determined to be
-invalid, illegal, or unenforceable by a court of competent jurisdiction, any
-such determination of invalidity, illegality, or unenforceability shall not
-affect any other term or provision of this License or invalidate or render
-unenforceable such term or provision in any other jurisdiction. If the
-determination of invalidity, illegality, or unenforceability by a court of
-competent jurisdiction pertains to the terms or provisions contained in the
-Ethical Standards section of this License, all rights in the Software granted to
-Licensee shall be deemed null and void as between Licensor and Licensee.
-
-8.5. Section Titles: Section titles are solely written for organizational
-purposes and should not be used to interpret the language within each section.
-
-8.6. Citations: Citations are solely written to provide context for the source
-of the provisions in the Ethical Standards.
-
-8.7. Section Summaries: Some sections have a brief italicized description which
-is provided for the sole purpose of briefly describing the section and should
-not be used to interpret the terms of the License.
-
-8.8. Entire License: This is the entire License between the Licensor and
-Licensee with respect to the claims released herein and that the consideration
-stated herein is the only consideration or compensation to be paid or exchanged
-between them for this License. This License cannot be modified or amended except
-in a writing signed by Licensor and Licensee.
-
-8.9. Successors and Assigns: This License shall be binding upon and inure to the
-benefit of the Licensor’s and Licensee’s respective heirs, successors, and
-assigns.
+    THE PACKAGE IS PROVIDED BY THE COPYRIGHT HOLDER AND CONTRIBUTORS "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES. THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT ARE DISCLAIMED TO THE EXTENT PERMITTED BY YOUR LOCAL LAW. UNLESS REQUIRED BY LAW, NO COPYRIGHT HOLDER OR CONTRIBUTOR WILL BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THE PACKAGE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
